@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:salon/pages/welcome_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({ Key? key }) : super(key: key);
@@ -13,9 +14,7 @@ class _MainPageState extends State<MainPage> {
     return MaterialApp(
       theme: ThemeData.light().copyWith(visualDensity: VisualDensity.comfortable),
       title: "Salon",
-      home: Scaffold(
-        
-      ),
+      home: WelcomePage(),
     );
   }
 }
