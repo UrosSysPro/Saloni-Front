@@ -10,11 +10,11 @@ class DiscountAdCard extends StatelessWidget {
       child: Stack(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40,vertical: 30),
+            padding: const EdgeInsets.only(left: 40,right:40,top: 30,bottom: 30),
             child: Container(
               width: double.infinity,
               height: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: 40,horizontal: 30),
+              padding:  const EdgeInsets.only(left: 40,right:40,top: 30,bottom: 30),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
@@ -40,7 +40,7 @@ class DiscountAdCard extends StatelessWidget {
                   Text("Podeli aplikaciju\n i osvoji svoj\n popust",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold                      
                     ),
                   ),

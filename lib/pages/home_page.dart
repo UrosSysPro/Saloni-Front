@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:salon/widgets/home_view.dart';
+import 'package:salon/widgets/search_view.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,6 +17,7 @@ class _HomePageState extends State<HomePage> {
         home: Scaffold(
       body: Builder(builder: (context){
         if(index==0)return HomeView();
+        if(index==1)return SearchView();
         return Container(color: Colors.red,);
       }),
       bottomNavigationBar: BottomNavigationBar(
@@ -34,8 +36,7 @@ class _HomePageState extends State<HomePage> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Pocetna"),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: "Pretrazi"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.favorite), label: "Omiljeni"),
+          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "Omiljeni"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Nalog"),
         ],
       ),
