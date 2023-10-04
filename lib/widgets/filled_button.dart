@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 class FilledButton extends StatelessWidget {
   final String text;
   final void Function() onTap;
+  final double radius,fontSize;
+  final EdgeInsets padding;
   FilledButton({
     required this.text,
     required this.onTap,
+    this.radius=15,
+    this.fontSize=20,
+    this.padding=const EdgeInsets.symmetric(horizontal: 35,vertical: 20),
     Key? key 
   }) : super(key: key);
 
@@ -14,10 +19,10 @@ class FilledButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 35,vertical: 20),
+        padding: padding,
         decoration: BoxDecoration(
           color: Color.fromARGB(255, 253, 94, 108),
-          borderRadius: BorderRadius.circular(15)
+          borderRadius: BorderRadius.circular(radius)
         ),
         child: Center(
           child: Text(
@@ -25,7 +30,7 @@ class FilledButton extends StatelessWidget {
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
-              fontSize: 20
+              fontSize: fontSize
             ),
           ),
         ),
