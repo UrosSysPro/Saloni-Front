@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:salon/pages/order_history.dart';
+import 'package:salon/pages/promo_page.dart';
 import 'package:salon/widgets/filled_button.dart' as Salon;
 
 class AccountView extends StatelessWidget {
@@ -56,7 +57,11 @@ class AccountView extends StatelessWidget {
                           return OrderHistory();
                         }));
                       }),
-                      listItem("Promo kodovi", () {}),
+                      listItem("Promo kodovi", () {
+                        Navigator.push(context, CupertinoPageRoute(builder: (context){
+                          return PromoPage();
+                        }));
+                      }),
                       listItem("Pomoc", () {}),
                       listItem("Podrska uzivo", () {}),
                       listItem("Uslovi koriscenja", () {}),

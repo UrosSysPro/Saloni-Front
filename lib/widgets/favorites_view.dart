@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:salon/pages/salon_page.dart';
 
 class FavoritesView extends StatelessWidget {
   const FavoritesView({ Key? key }) : super(key: key);
@@ -15,55 +17,62 @@ class FavoritesView extends StatelessWidget {
               return titleText("Omiljeni saloni");
             }
             index--;
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20,vertical: 20),
-              child: Container(
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: const Color.fromARGB(255,253, 94, 108),
-                ),
-                height: 200,
-                width: double.infinity,
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                        height: 90,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20))
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10,left: 12),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  nameText("Hair Palace"),
-                                  typeText("Frizerski salon"),
-                                  SizedBox(height: 10,),
-                                  ocenaText("Ocena:\n4.6")
-                                ],
+            return GestureDetector(
+              onTap: (){
+                Navigator.push(context, CupertinoPageRoute(builder: (context){
+                  return SalonPage();
+                }));
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20,vertical: 20),
+                child: Container(
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: const Color.fromARGB(255,253, 94, 108),
+                  ),
+                  height: 200,
+                  width: double.infinity,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                          height: 90,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20))
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10,left: 12),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    nameText("Hair Palace"),
+                                    typeText("Frizerski salon"),
+                                    SizedBox(height: 10,),
+                                    ocenaText("Ocena:\n4.6")
+                                  ],
+                                ),
                               ),
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.favorite,color: Colors.red,),
-                              onPressed: (){},
-                            )
-                          ],
-                        ),
+                              IconButton(
+                                icon: Icon(Icons.favorite,color: Colors.red,),
+                                onPressed: (){},
+                              )
+                            ],
+                          ),
+                        )
                       )
-                    )
-                  ],
+                    ],
+                  ),
                 ),
               ),
             );
