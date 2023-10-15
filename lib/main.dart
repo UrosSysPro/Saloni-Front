@@ -7,9 +7,9 @@ void main(){
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_)=>AppState())
+        ChangeNotifierProvider(create: (_)=>AppState()),
       ],
-      child: MainPage()
+      child: MainPage(),
     )
   );
 }

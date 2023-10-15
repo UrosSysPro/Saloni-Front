@@ -32,7 +32,13 @@ class AppState extends ChangeNotifier{
 
   }
 
-  void signIn(String username,String password){}
-  void logIn(String username,String password){}
   
+  // void signIn(String username,String password){}
+  // void logIn(String username,String password){}  
+  // List<Salon> getSalons(String pattern){}
+  // List<Salon> getRecomendedSalonsForUser(String userId){}
+  // List<Salon> getRecomendedSalonsForUser(String userId,String categoryId){}
+  // List<Salon> getFavorites(String userId){}
+  // List<Order> getUserOrderHistory(String userId){}
+  // void enterPromoCode(String userId,String code){}
 }
