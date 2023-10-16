@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:salon/app_state.dart';
 import 'package:salon/pages/home_page.dart';
 import 'package:salon/widgets/filled_input.dart';
 import 'package:salon/widgets/filled_button.dart' as salon;
@@ -50,12 +52,14 @@ class _SigninPageState extends State<SigninPage> {
               salon.FilledButton(
                 text: "Registruj se",
                 onTap: () {
-                  print("hello");
-                  var navigator=Navigator.of(context);
-                  navigator.pop();
-                  navigator.pushReplacement(CupertinoPageRoute(builder: (context){
-                    return HomePage();
-                  }));
+                  // print("hello");
+                  // var navigator=Navigator.of(context);
+                  // navigator.pop();
+                  // navigator.pushReplacement(CupertinoPageRoute(builder: (context){
+                  //   return HomePage();
+                  // }));
+                  AppState appState=context.read<AppState>();
+                  appState.signIn();
                 },
               ),
               SizedBox(height: 15,),
