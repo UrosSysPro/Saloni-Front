@@ -1,5 +1,5 @@
 class Salon{
-  String? name,id,adress;
+  String? name,id,adress,imageUrl;
   
   Salon(
     this.id,

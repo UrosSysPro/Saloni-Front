@@ -31,7 +31,7 @@ class AppState extends ChangeNotifier{
   AppState(){
 
   }
-
+  
   
   // void signIn(String username,String password){}
   // void logIn(String username,String password){}  
