@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:salon/app_state.dart';
-import 'package:salon/pages/home_page.dart';
+import 'package:salon/pages/main_page.dart';
 import 'package:salon/widgets/filled_input.dart';
 import 'package:salon/widgets/filled_button.dart' as salon;
 import 'package:salon/widgets/page_gradient.dart';
@@ -16,6 +16,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool hiddenText=true;
+  String username="",password="";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,10 +33,12 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(height: 40,),
               FilledInput(
+                onChange: (value){username=value;},
                 placeholder: "Korisnicko Ime...",
               ),
               SizedBox(height: 40,),
               FilledInput(
+                onChange: (value){password=value;},
                 hiddenText: hiddenText,
                 placeholder: "Lozinka...",
                 icon: GestureDetector(
@@ -52,15 +55,12 @@ class _LoginPageState extends State<LoginPage> {
                   child: forgotPasswordText("Zaboravio si lozinku?")),
               SizedBox(height: 20,),
               salon.FilledButton(
+                enabled: !context.watch<AppState>().loadingUser,
                 text: "Uloguj se",
-                onTap: () {
-                  // var navigator=Navigator.of(context);
-                  // navigator.pop();
-                  // navigator.pushReplacement(CupertinoPageRoute(builder: (context){
-                  //   return HomePage();
-                  // }));
+                onTap: () async{
                   AppState appState=context.read<AppState>();
-                  appState.logIn("","");
+                  if(await appState.logIn(username,password))
+                    navigatorKey.currentState?.pop();
                 },
               ),
               SizedBox(height: 15,),

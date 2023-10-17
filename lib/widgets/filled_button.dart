@@ -5,7 +5,9 @@ class FilledButton extends StatelessWidget {
   final void Function() onTap;
   final double radius,fontSize;
   final EdgeInsets padding;
+  final bool enabled;
   FilledButton({
+    this.enabled=true,
     required this.text,
     required this.onTap,
     this.radius=15,
@@ -21,14 +23,14 @@ class FilledButton extends StatelessWidget {
       child: Container(
         padding: padding,
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 253, 94, 108),
+          color:enabled?Color.fromARGB(255, 253, 94, 108):Colors.grey,
           borderRadius: BorderRadius.circular(radius)
         ),
         child: Center(
           child: Text(
             text,
             style: TextStyle(
-              color: Colors.white,
+              color: enabled?Colors.white:Colors.black54,
               fontWeight: FontWeight.bold,
               fontSize: fontSize
             ),

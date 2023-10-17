@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:salon/app_state.dart';
-import 'package:salon/pages/home_page.dart';
+import 'package:salon/pages/main_page.dart';
 import 'package:salon/widgets/filled_input.dart';
 import 'package:salon/widgets/filled_button.dart' as salon;
 import 'package:salon/widgets/page_gradient.dart';
@@ -16,6 +16,7 @@ class SigninPage extends StatefulWidget {
 
 class _SigninPageState extends State<SigninPage> {
   bool hiddenText=true;
+  String username="",email="",password="";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,14 +33,17 @@ class _SigninPageState extends State<SigninPage> {
               ),
               SizedBox(height: 35,),
               FilledInput(
+                onChange: (value){email=value;},
                 placeholder: "Email adresa...",
               ),
               SizedBox(height: 35,),
               FilledInput(
+                onChange: (value){username=value;},
                 placeholder: "Korisnicko ime...",
               ),
               SizedBox(height: 35,),
               FilledInput(
+                onChange: (value){password=value;},
                 hiddenText: hiddenText,
                 placeholder: "Lozinka...",
                 icon: GestureDetector(
@@ -50,16 +54,12 @@ class _SigninPageState extends State<SigninPage> {
               ),
               SizedBox(height: 35,),
               salon.FilledButton(
+                enabled: !context.watch<AppState>().loadingUser,
                 text: "Registruj se",
-                onTap: () {
-                  // print("hello");
-                  // var navigator=Navigator.of(context);
-                  // navigator.pop();
-                  // navigator.pushReplacement(CupertinoPageRoute(builder: (context){
-                  //   return HomePage();
-                  // }));
+                onTap: () async{
                   AppState appState=context.read<AppState>();
-                  appState.signIn();
+                  if(await appState.signIn(email,username,password))
+                    navigatorKey.currentState?.pop();
                 },
               ),
               SizedBox(height: 15,),

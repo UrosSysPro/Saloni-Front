@@ -4,7 +4,9 @@ class FilledInput extends StatelessWidget {
   final String? placeholder,initialValue;
   final Widget? icon;
   final bool hiddenText;
+  final void Function(String value)? onChange;
   const FilledInput({
+    this.onChange,
     this.placeholder,
     this.initialValue,
     this.icon,
@@ -26,6 +28,7 @@ class FilledInput extends StatelessWidget {
         children: [
           Expanded(
             child: TextFormField(
+              onChanged: onChange??(value){},
               obscureText: hiddenText,
               style: TextStyle(
                 fontSize: 20,fontWeight: FontWeight.bold

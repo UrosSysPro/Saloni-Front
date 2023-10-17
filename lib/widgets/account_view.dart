@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:salon/app_state.dart';
 import 'package:salon/pages/order_history.dart';
 import 'package:salon/pages/promo_page.dart';
 import 'package:salon/widgets/filled_button.dart' as Salon;
@@ -26,7 +28,7 @@ class AccountView extends StatelessWidget {
                     width: 20,
                   ),
                   Text(
-                    "User Name",
+                    context.read<AppState>().user?.username??"Default username",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   )
                 ],
@@ -35,7 +37,7 @@ class AccountView extends StatelessWidget {
             Container(
               clipBehavior: Clip.antiAlias,
               width: double.infinity,
-              height: 400,
+              height: 450,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
@@ -65,7 +67,10 @@ class AccountView extends StatelessWidget {
                       listItem("Pomoc", () {}),
                       listItem("Podrska uzivo", () {}),
                       listItem("Uslovi koriscenja", () {}),
-                      listItem("Pravila privatnosti", () {})
+                      listItem("Pravila privatnosti", () {}),
+                      listItem("Izloguj se",(){
+                        context.read<AppState>().logOut();
+                      }),
                     ],
                   ),
                 ),
