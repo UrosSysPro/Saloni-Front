@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 
 class Chip extends StatelessWidget {
   final String text;
-  const Chip({ 
+  final void Function() onTap;
+  Chip({ 
+    required this.onTap,
     required this.text,
-    Key? key }) : super(key: key);
+    Key? key 
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

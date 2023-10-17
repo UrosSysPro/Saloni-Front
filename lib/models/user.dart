@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:salon/models/role.dart';
-
 class User {
   String? username, firstName, lastName;
   List<int>? useCases;
@@ -13,15 +11,16 @@ class User {
   });
   static User? userFromJson(Map<String, dynamic> json) {
     try {
-      List<dynamic>list=jsonDecode(json["UseCases"]);
-      // for(var i in list)print(i.runtimeType);
+      List<dynamic> list = jsonDecode(json["UseCases"]);
       User user = User(
         username: json["Username"],
+        firstName: json["Firstname"]??"Defaultfirstname",
+        lastName: json["Lastname"]??"Defaultlastname",
         useCases: list.map((e) => int.parse(e.toString())).toList(),
       );
       return user;
     } catch (Exception) {
-      print("error reading json");
+      print("[ERROR] loading user form json: ${jsonEncode(json)}");
       return null;
     }
   }

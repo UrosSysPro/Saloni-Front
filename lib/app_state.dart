@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import "models/user.dart";
 import "package:http/http.dart" as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AppState extends ChangeNotifier {
   ThemeData themeData = ThemeData(
@@ -18,15 +19,32 @@ class AppState extends ChangeNotifier {
           onTertiary: Colors.white,
           background: const Color.fromARGB(255, 253, 245, 215),
           onBackground: Colors.black),
-      textTheme: TextTheme(
+      textTheme: const TextTheme(
         headlineMedium: TextStyle(
             fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black),
       ));
 
-  AppState() {}
+  
+
+  FlutterSecureStorage storage=const FlutterSecureStorage(
+    aOptions: AndroidOptions(encryptedSharedPreferences: true),
+  );
+  AppState() {
+    loadingUser=true;
+    storage.read(key: "user").then((value){
+      if(value!=null){
+        user=User.userFromJson(JwtDecoder.decode(value));
+      }
+      loadingUser=false;
+      notifyListeners();
+    });
+  }
 
   User? user;
   bool loadingUser=false;
+  bool errorLogInInfo=false;
+  bool errorSignInInfo=false;
+  bool serverError=false;
 
 
   Future<bool> signIn(String email, String username, String password) async {
@@ -54,8 +72,8 @@ class AppState extends ChangeNotifier {
       }else{
         print("nije uspeo da napravi nalog ${response.statusCode} \n${response.body}");
       }
-    }catch(Exception){
-      print("nema interneta ili servera");
+    }on Exception{
+        print("nema interneta ili servera");
     }
     loadingUser=false;
     notifyListeners();
@@ -77,6 +95,7 @@ class AppState extends ChangeNotifier {
           headers: headers);
       if (response.statusCode == 200) {
         user=User.userFromJson(JwtDecoder.decode(response.body));
+        await storage.write(key: "user", value: response.body);
         success=true;
       } else {
         print("[ERROR] Wrong username of password");

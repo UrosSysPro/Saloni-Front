@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:salon/widgets/category_list_item.dart';
 import 'package:salon/widgets/discoutnt_ad_card.dart';
@@ -45,12 +46,19 @@ class _HomeViewState extends State<HomeView> {
                         children: [
                           Salon.Chip(
                             text: "U Blizini",
+                            onTap: (){
+                              // Navigator.push(context, CupertinoPageRoute(builder: (context){
+
+                              // }));
+                            },
                           ),
                           Salon.Chip(
                             text: "Sortiraj",
+                            onTap: (){},
                           ),
                           Salon.Chip(
                             text: "Kategorije",
+                            onTap: (){},
                           ),
                         ],
                       ),
