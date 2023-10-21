@@ -40,6 +40,7 @@ class AppState extends ChangeNotifier {
     });
   }
 
+  bool debugServer=true;
   User? user;
   bool loadingUser=false;
   bool errorLogInInfo=false;
@@ -48,6 +49,14 @@ class AppState extends ChangeNotifier {
 
 
   Future<bool> signIn(String email, String username, String password) async {
+    if(debugServer){
+      user=User(
+        username: "Defaultusername",
+        useCases: List<int>.generate(7, (index) => index)
+      );
+      notifyListeners();
+      return true;
+    }
     bool success=false;
     loadingUser=true;
     notifyListeners();
@@ -81,6 +90,14 @@ class AppState extends ChangeNotifier {
   }
 
   Future<bool> logIn(String username, String password) async {
+    if(debugServer){
+      user=User(
+        username: "Defaultusername",
+        useCases: List<int>.generate(7, (index) => index)
+      );
+      notifyListeners();
+      return true;
+    }
     bool success=false;
     loadingUser=true;
     notifyListeners();
