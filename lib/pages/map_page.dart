@@ -8,28 +8,30 @@ class MapPage extends StatelessWidget {
 
 @override
 Widget build(BuildContext context) {
-  return FlutterMap(
-    options: MapOptions(
-      center: LatLng(51.509364, -0.128928),
-      zoom: 9.2,
+  return Scaffold(
+    body: FlutterMap(
+      options: MapOptions(
+        center: LatLng(51.509364, -0.128928),
+        zoom: 9.2,
+      ),
+      children: [
+        TileLayer(
+          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          userAgentPackageName: 'com.example.app',
+        ),
+        RichAttributionWidget(
+          attributions: [
+            TextSourceAttribution(
+              'OpenStreetMap contributors',
+              onTap: (){
+                print("click");
+              },
+              // onTap: () => launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
+            ),
+          ],
+        ),
+      ],
     ),
-    children: [
-      TileLayer(
-        urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-        userAgentPackageName: 'com.example.app',
-      ),
-      RichAttributionWidget(
-        attributions: [
-          TextSourceAttribution(
-            'OpenStreetMap contributors',
-            onTap: (){
-              print("click");
-            },
-            // onTap: () => launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
-          ),
-        ],
-      ),
-    ],
   );
 }
 }

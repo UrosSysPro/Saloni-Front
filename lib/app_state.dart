@@ -150,12 +150,14 @@ class AppState extends ChangeNotifier {
         name,
         description,
         rating,
+        imageUrl
       },
       {
         id,
         name,
         description,
         rating,
+        imageUrl
       },
     ]
     //////////////////////////////////////////////////
@@ -181,6 +183,9 @@ class AppState extends ChangeNotifier {
         description,
         rating,
         salonProfileImgUrl,
+        float lat,
+        float lng,
+        string adresa,
         services:[
           {
             id,
@@ -197,8 +202,27 @@ class AppState extends ChangeNotifier {
       }
       //informacije o salonu, sta moze da se naruci i one slike na dnu
  ///////////////////////////////////////////////////////////// 
-    
-
+    near user
+ [
+      {
+        id,
+        lat,
+        lng,
+        name,
+        description,
+        rating,
+        imageUrl
+      },
+      {
+        id,
+        lat,
+        lng,
+        name,
+        description,
+        rating,
+        imageUrl
+      },
+    ]
     
    */
 }

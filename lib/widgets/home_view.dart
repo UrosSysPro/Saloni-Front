@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:salon/pages/map_page.dart';
 import 'package:salon/widgets/category_list_item.dart';
 import 'package:salon/widgets/discoutnt_ad_card.dart';
 import 'package:salon/widgets/home_section.dart';
 import 'package:salon/widgets/page_view_indicator.dart';
 import 'package:salon/widgets/search_bar.dart' as Salon;
 import 'package:salon/widgets/chip.dart' as Salon;
+
+
 class HomeView extends StatefulWidget {
   const HomeView({ Key? key }) : super(key: key);
 
@@ -47,9 +50,9 @@ class _HomeViewState extends State<HomeView> {
                           Salon.Chip(
                             text: "U Blizini",
                             onTap: (){
-                              // Navigator.push(context, CupertinoPageRoute(builder: (context){
-
-                              // }));
+                              Navigator.push(context, CupertinoPageRoute(builder: (context){
+                                return MapPage();
+                              }));
                             },
                           ),
                           Salon.Chip(
