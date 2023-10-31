@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
 
-class SalonPage extends StatelessWidget {
-  const SalonPage({ Key? key }) : super(key: key);
+class SalonPage extends StatefulWidget {
+  String salonId;
+  SalonPage(this.salonId,{ Key? key,}) : super(key: key);
+
+  @override
+  State<SalonPage> createState() => _SalonPageState();
+}
+
+class _SalonPageState extends State<SalonPage> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //procitati iz baze 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +84,7 @@ class SalonPage extends StatelessWidget {
       ),
     );
   }
+
   Widget kategorija(String name,void Function() onTap){
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),

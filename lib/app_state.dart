@@ -1,6 +1,7 @@
 import "dart:convert";
 
 import 'package:flutter/material.dart';
+import 'package:salon/models/salon.dart';
 import "models/user.dart";
 import "package:http/http.dart" as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -33,7 +34,9 @@ class AppState extends ChangeNotifier {
     loadingUser=true;
     storage.read(key: "user").then((value){
       if(value!=null){
-        user=User.userFromJson(JwtDecoder.decode(value));
+        String? jwtTokenString=jsonDecode(value)["token"];
+        // print(jsonDecode(value)["token"]);
+        user=User.userFromJson(JwtDecoder.decode(value),jwtTokenString);
       }
       loadingUser=false;
       notifyListeners();
@@ -47,6 +50,8 @@ class AppState extends ChangeNotifier {
   bool errorSignInInfo=false;
   bool serverError=false;
 
+  bool searching=false,searchError=false;
+  List<Salon> searchResults=[];
 
   Future<bool> signIn(String email, String username, String password) async {
     if(debugServer){
@@ -111,13 +116,14 @@ class AppState extends ChangeNotifier {
           body: body,
           headers: headers);
       if (response.statusCode == 200) {
-        user=User.userFromJson(JwtDecoder.decode(response.body));
+        String? jwtTokenString=jsonDecode(response.body)["token"];
+        user=User.userFromJson(JwtDecoder.decode(response.body),jwtTokenString);
         await storage.write(key: "user", value: response.body);
         success=true;
       } else {
         print("[ERROR] Wrong username of password");
       }
-    } catch (Exception) {
+    } catch (e) {
       print("[ERROR] server connection");
     }
 
@@ -128,6 +134,37 @@ class AppState extends ChangeNotifier {
   }
   void logOut(){
     user=null;
+    notifyListeners();
+  }
+
+
+  Future<void> search(String value)async{
+    if(debugServer){
+      //vrati fake data
+    }
+    searching=true;
+    notifyListeners();
+
+    var headers={
+      "Authorization":"Bearer ${user?.jwtTokenString}"
+    };
+    try{
+      var response=await http.get(
+        Uri.parse("http://localhost:5234/api/Salon?Keyword=$value&PerPage=100&Page=1"),
+        headers: headers
+      );
+      if(response.statusCode==200){
+        searchError=false;
+        searchResults=Salon.fromSearchResultJson(response.body);
+      }else{
+        searchError=true;
+      }
+      // print(response.body);
+    }catch(e){
+      searchError=true;
+      print("[ERROR] AppState Search nema interneta ili server ne radi");
+    }
+    searching=false;
     notifyListeners();
   }
 

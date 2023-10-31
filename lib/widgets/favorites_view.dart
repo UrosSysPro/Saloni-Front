@@ -20,7 +20,7 @@ class FavoritesView extends StatelessWidget {
             return GestureDetector(
               onTap: (){
                 Navigator.push(context, CupertinoPageRoute(builder: (context){
-                  return SalonPage();
+                  return SalonPage("2");
                 }));
               },
               child: Padding(

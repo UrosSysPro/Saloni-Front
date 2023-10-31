@@ -1,15 +1,16 @@
 import 'dart:convert';
 
 class User {
-  String? username, firstName, lastName;
+  String? username, firstName, lastName,jwtTokenString;
   List<int>? useCases;
   User({
     this.username,
     this.firstName = "Defaultfirstname",
     this.lastName = "Defaultlastname",
     this.useCases = const [],
+    this.jwtTokenString
   });
-  static User? userFromJson(Map<String, dynamic> json) {
+  static User? userFromJson(Map<String, dynamic> json,String? jwtTokenString) {
     try {
       List<dynamic> list = jsonDecode(json["UseCases"]);
       User user = User(
@@ -17,6 +18,7 @@ class User {
         firstName: json["Firstname"]??"Defaultfirstname",
         lastName: json["Lastname"]??"Defaultlastname",
         useCases: list.map((e) => int.parse(e.toString())).toList(),
+        jwtTokenString: jwtTokenString
       );
       return user;
     } catch (Exception) {
