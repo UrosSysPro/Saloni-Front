@@ -25,45 +25,42 @@ class AppState extends ChangeNotifier {
             fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black),
       ));
 
-  
-
-  FlutterSecureStorage storage=const FlutterSecureStorage(
+  FlutterSecureStorage storage = const FlutterSecureStorage(
     aOptions: AndroidOptions(encryptedSharedPreferences: true),
   );
   AppState() {
-    loadingUser=true;
-    storage.read(key: "user").then((value){
-      if(value!=null){
-        String? jwtTokenString=jsonDecode(value)["token"];
-        // print(jsonDecode(value)["token"]);
-        user=User.userFromJson(JwtDecoder.decode(value),jwtTokenString);
+    loadingUser = true;
+    storage.read(key: "user").then((value) {
+      if (value != null) {
+        String? jwtTokenString = jsonDecode(value)["token"];
+        print(JwtDecoder.decode(value));
+        user = User.userFromJson(JwtDecoder.decode(value), jwtTokenString);
       }
-      loadingUser=false;
+      loadingUser = false;
       notifyListeners();
     });
   }
 
-  bool debugServer=true;
+  bool debugServer = true;
   User? user;
-  bool loadingUser=false;
-  bool errorLogInInfo=false;
-  bool errorSignInInfo=false;
-  bool serverError=false;
+  bool loadingUser = false;
+  bool errorLogInInfo = false;
+  bool errorSignInInfo = false;
+  bool serverError = false;
 
-  bool searching=false,searchError=false;
-  List<Salon> searchResults=[];
+  bool searching = false, searchError = false;
+  List<Salon> searchResults = [];
 
   Future<bool> signIn(String email, String username, String password) async {
-    if(debugServer){
-      user=User(
-        username: "Defaultusername",
-        useCases: List<int>.generate(7, (index) => index)
-      );
+    if (debugServer) {
+      user = User(
+          username: "Defaultusername",
+          useCases: List<int>.generate(7, (index) => index));
       notifyListeners();
       return true;
     }
-    bool success=false;
-    loadingUser=true;
+    bool success = false;
+    loadingUser = true;
     notifyListeners();
 
     var body = jsonEncode({
@@ -75,39 +72,39 @@ class AppState extends ChangeNotifier {
 
     var headers = {'content-type': 'application/json'};
 
-    try{
-      var response=await http.post(
-        Uri.parse("http://localhost:5234/api/Register"),
-        body: body,
-        headers: headers
-      );
-      if(response.statusCode==201){
-        success=await logIn(username, password);
-      }else{
-        print("nije uspeo da napravi nalog ${response.statusCode} \n${response.body}");
+    try {
+      var response = await http.post(
+          Uri.parse("http://localhost:5234/api/Register"),
+          body: body,
+          headers: headers);
+      if (response.statusCode == 201) {
+        success = await logIn(username, password);
+      } else {
+        print(
+            "nije uspeo da napravi nalog ${response.statusCode} \n${response.body}");
       }
-    }on Exception{
-        print("nema interneta ili servera");
+    } on Exception {
+      print("nema interneta ili servera");
     }
-    loadingUser=false;
+    loadingUser = false;
     notifyListeners();
     return success;
   }
 
   Future<bool> logIn(String username, String password) async {
-    if(debugServer){
-      user=User(
-        username: "Defaultusername",
-        useCases: List<int>.generate(7, (index) => index)
-      );
+    if (debugServer) {
+      user = User(
+          username: "Defaultusername",
+          useCases: List<int>.generate(7, (index) => index));
       notifyListeners();
       return true;
     }
-    bool success=false;
-    loadingUser=true;
+    bool success = false;
+    loadingUser = true;
     notifyListeners();
 
-    var body = jsonEncode({'username': username.trim(), 'password': password.trim()});
+    var body =
+        jsonEncode({'username': username.trim(), 'password': password.trim()});
     var headers = {'content-type': 'application/json'};
 
     try {
@@ -116,10 +113,11 @@ class AppState extends ChangeNotifier {
           body: body,
           headers: headers);
       if (response.statusCode == 200) {
-        String? jwtTokenString=jsonDecode(response.body)["token"];
-        user=User.userFromJson(JwtDecoder.decode(response.body),jwtTokenString);
+        String? jwtTokenString = jsonDecode(response.body)["token"];
+        user =
+            User.userFromJson(JwtDecoder.decode(response.body), jwtTokenString);
         await storage.write(key: "user", value: response.body);
-        success=true;
+        success = true;
       } else {
         print("[ERROR] Wrong username of password");
       }
@@ -127,45 +125,169 @@ class AppState extends ChangeNotifier {
       print("[ERROR] server connection");
     }
 
-    loadingUser=false;
+    loadingUser = false;
     notifyListeners();
 
     return success;
   }
-  void logOut(){
-    user=null;
+
+  void logOut() {
+    user = null;
     notifyListeners();
   }
 
-
-  Future<void> search(String value)async{
-    if(debugServer){
+  Future<void> search(String value) async {
+    if (debugServer) {
       //vrati fake data
     }
-    searching=true;
+    searching = true;
     notifyListeners();
 
-    var headers={
-      "Authorization":"Bearer ${user?.jwtTokenString}"
-    };
-    try{
-      var response=await http.get(
-        Uri.parse("http://localhost:5234/api/Salon?Keyword=$value&PerPage=100&Page=1"),
-        headers: headers
-      );
-      if(response.statusCode==200){
-        searchError=false;
-        searchResults=Salon.fromSearchResultJson(response.body);
-      }else{
-        searchError=true;
+    var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
+    try {
+      var response = await http.get(
+          Uri.parse("http://localhost:5234/api/Salon?Keyword=$value"),
+          headers: headers);
+      if (response.statusCode == 200) {
+        searchError = false;
+        searchResults = Salon.fromSearchResultJson(response.body);
+      } else {
+        searchError = true;
       }
       // print(response.body);
-    }catch(e){
-      searchError=true;
+    } catch (e) {
+      searchError = true;
       print("[ERROR] AppState Search nema interneta ili server ne radi");
     }
-    searching=false;
+    searching = false;
     notifyListeners();
+  }
+
+  Future<List<Salon>> loadSalonsOnMap() async {
+    if (debugServer) {
+      //vrati fake data
+    }
+
+    var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
+    try {
+      var response = await http.get(
+          Uri.parse("http://localhost:5234/api/Salon?Keyword="),
+          headers: headers);
+      if (response.statusCode == 200) {
+        searchError = false;
+        return Salon.fromSearchResultJson(response.body);
+      } else {
+        searchError = true;
+      }
+      // print(response.body);
+    } catch (e) {
+      searchError = true;
+      print("[ERROR] AppState Search nema interneta ili server ne radi");
+    }
+    return [];
+  }
+
+  Future<List<Salon>> getFavorites() async {
+    if (debugServer) {
+      //vrati fake data
+    }
+
+    var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
+    try {
+      var response = await http.get(
+          Uri.parse("http://localhost:5234/api/Favorite?UserId=${user!.id}"),
+          headers: headers);
+      if (response.statusCode == 200) {
+        return Salon.fromSearchResultJson(response.body);
+      }else{
+        print("[ERROR] get favorites ${response.statusCode}  ${response.body}");
+      }
+      // print(response.body);
+    } catch (e) {
+      searchError = true;
+      print("[ERROR] AppState Favorite nema interneta ili server ne radi");
+    }
+    return [];
+  }
+
+  Future<bool> addFavorite(String salonId) async {
+    if (debugServer) {
+      //vrati fake data
+    }
+
+    var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
+    var body={
+      "salonId":salonId,
+      "userId":user!.id
+    };
+    try {
+      var response = await http.post(
+          Uri.parse("http://localhost:5234/api/Favorite?UserId=${user!.id}"),
+            headers: headers,
+            body: body
+          );
+      if (response.statusCode == 200) {
+        print("added favorite");
+        return true;
+      } else {
+        print("[ERROR] adding favorite ${response.statusCode} ${response.body}");
+        return false;
+      }
+    } catch (e) {
+      print("[ERROR] AppState addFavorite nema interneta ili server ne radi");
+    }
+    return false;
+  }
+
+  Future<bool> removeFavorite(String favoriteId) async {
+    if (debugServer) {
+      //vrati fake data
+    }
+
+    var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
+    
+    try {
+      var response = await http.delete(
+          Uri.parse("http://localhost:5234/api/Favorite/${favoriteId}"),
+            headers: headers,
+          );
+      if (response.statusCode == 200) {
+        print("added favorite");
+        return true;
+      } else {
+        print("[ERROR] adding favorite");
+        return false;
+      }
+    } catch (e) {
+      print("[ERROR] AppState addFavorite nema interneta ili server ne radi");
+    }
+    return false;
+  }
+  
+  Future<List<Salon>> getRecomended()async{
+    if (debugServer) {
+      //vrati fake data
+    }
+    var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
+    try {
+      var response = await http.get(
+          Uri.parse("http://localhost:5234/api/Salon?Keyword="),
+          headers: headers);
+      if (response.statusCode == 200) {
+        return Salon.fromSearchResultJson(response.body);
+      } else {
+        return [];
+      }
+      // print(response.body);
+    } catch (e) {
+      searchError = true;
+      print("[ERROR] AppState Search nema interneta ili server ne radi");
+    }
+    return [];
+  } 
+  Future<List<Salon>> getRecomendedForCategory(String category)async{
+    await search("");
+    return searchResults;
   }
 
   // void signIn(String username,String password){}

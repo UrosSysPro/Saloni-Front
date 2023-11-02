@@ -25,7 +25,9 @@ class Salon {
           name: salonJson[i]["name"],
           description: salonJson[i]["description"],
           avgRating: double.parse(salonJson[i]["avgRating"]??"4.0"),
-          favorite: true,
+          lat: double.parse((salonJson[i]["latitude"]).toString()),
+          lng: double.parse((salonJson[i]["longitude"]).toString()),
+          favorite: salonJson[i]["favorite"]??false,
         ));
       }
     } catch (e) {

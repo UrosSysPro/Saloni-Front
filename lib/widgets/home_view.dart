@@ -1,13 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:salon/app_state.dart';
 import 'package:salon/pages/map_page.dart';
 import 'package:salon/widgets/category_list_item.dart';
 import 'package:salon/widgets/discoutnt_ad_card.dart';
+import 'package:salon/widgets/home_category_view.dart';
 import 'package:salon/widgets/home_section.dart';
 import 'package:salon/widgets/page_view_indicator.dart';
+import 'package:salon/widgets/salon_view.dart';
 import 'package:salon/widgets/search_bar.dart' as Salon;
 import 'package:salon/widgets/chip.dart' as Salon;
-
+import 'package:salon/models/salon.dart' as SalonClass;
 
 class HomeView extends StatefulWidget {
   const HomeView({ Key? key }) : super(key: key);
@@ -18,8 +22,35 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   int currentPage=0;
+
+  int selectedCategory=-1;
+
+  List<SalonClass.Salon>? saloni;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // context.read<AppState>().getRecomended().then((value){
+    //   // setState(() {
+    //   //   saloni=value;
+    //   // });
+    // });
+    // print("loading recomendations");
+    context.read<AppState>().getRecomended().then((value){
+      print("recomendations loaded");
+      setState(() {
+        saloni=value;
+      });
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    if(selectedCategory!=-1){
+      return HomeCategoryView();
+    }
     return Container(
       color: Color.fromARGB(255, 253, 245, 215),
       child: ListView(
@@ -95,17 +126,27 @@ class _HomeViewState extends State<HomeView> {
                           child: ListView(
                             scrollDirection: Axis.horizontal,
                             children: [
-                              CategoryListItem(categoryName: "Frizerski\nSaloni", icon: FlutterLogo(size: 40,)),
-                              CategoryListItem(categoryName: "Kozmeticki\nSaloni", icon: FlutterLogo(size: 40,)),
-                              CategoryListItem(categoryName: "Nokti", icon: FlutterLogo(size: 40,)),
-                              CategoryListItem(categoryName: "Spa\Centar", icon: FlutterLogo(size: 40,)),
+                              CategoryListItem(categoryName: "Frizerski\nSaloni", icon: FlutterLogo(size: 40,),onTap: (){setState(() {
+                                selectedCategory=1;
+                              });},),
+                              CategoryListItem(categoryName: "Kozmeticki\nSaloni", icon: FlutterLogo(size: 40,),onTap: (){setState(() {
+                                selectedCategory=1;
+                              });},),
+                              CategoryListItem(categoryName: "Nokti", icon: FlutterLogo(size: 40,),onTap: (){setState(() {
+                                selectedCategory=1;
+                              });},),
+                              CategoryListItem(categoryName: "Spa\Centar", icon: FlutterLogo(size: 40,),onTap: (){setState(() {
+                                selectedCategory=1;
+                              });},),
                             ],
                           ),
                         ),
                       ) 
                     ),
                     SizedBox(height: 20,),
-                    HomeSection(sectionName: "Preporuceni", child: Container()),
+                    HomeSection(sectionName: "Preporuceni", child: Column(
+                      children: saloni?.map((e) => SalonView(salon: e)).toList()??[],
+                    )),
                     SizedBox(height: 200,)
                   ],
                 )

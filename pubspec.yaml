@@ -41,6 +41,7 @@ dependencies:
   http: ^0.13.6
   flutter_map: ^4.0.0
   latlong2: ^0.8.2
+  flutter_map_location_marker: ^6.0.0
 
 dev_dependencies:
   flutter_test:
