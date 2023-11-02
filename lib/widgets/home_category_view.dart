@@ -1,13 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:salon/pages/map_page.dart';
 import 'package:salon/widgets/category_list_item.dart';
-import 'package:salon/widgets/discoutnt_ad_card.dart';
 import 'package:salon/widgets/home_section.dart';
-import 'package:salon/widgets/page_view_indicator.dart';
 import 'package:salon/widgets/salon_view.dart';
-import 'package:salon/widgets/chip.dart' as Salon;
-// import 'package:salon/widgets/filled_button.dart' as Salon;
 import 'package:salon/models/salon.dart' as SalonClass;
 import 'package:provider/provider.dart';
 import 'package:salon/app_state.dart';

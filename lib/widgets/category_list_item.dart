@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class CategoryListItem extends StatelessWidget {
   final String categoryName;
   final Widget icon;
-  void Function()? onTap;
-  CategoryListItem({
+  final void Function()? onTap;
+  const CategoryListItem({
     Key? key,
     required this.categoryName,
     required this.icon, 

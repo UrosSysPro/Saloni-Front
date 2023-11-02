@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:salon/app_state.dart';
+import 'package:salon/models/salon.dart';
 
 class SalonPage extends StatefulWidget {
-  String salonId;
-  SalonPage(this.salonId,{ Key? key,}) : super(key: key);
+  final String salonId;
+  const SalonPage(this.salonId,{ Key? key,}) : super(key: key);
 
   @override
   State<SalonPage> createState() => _SalonPageState();
@@ -10,11 +13,18 @@ class SalonPage extends StatefulWidget {
 
 class _SalonPageState extends State<SalonPage> {
 
+  Salon? salon;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    //procitati iz baze 
+    context.read<AppState>().getSalon(widget.salonId).then((value){
+      // salon=value;
+      setState(() {
+        salon=value;
+      });
+    });
   }
 
   @override
@@ -30,6 +40,18 @@ class _SalonPageState extends State<SalonPage> {
                   width: double.infinity,
                   height: 200,
                   color: const Color.fromARGB(255,253, 94, 108),
+                  child: Image(
+                    image: NetworkImage("http://localhost:5234/images/${salon?.imageUrl}",),
+                    width: double.infinity,
+                    height: 200,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      
+                      return Center(
+                        child: Icon(Icons.photo,size: 200,),
+                      );
+                    },
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 100,left: 20,right: 20),
@@ -46,8 +68,8 @@ class _SalonPageState extends State<SalonPage> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("Snip and Style",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-                            Text("Ocena\n5.0",style: TextStyle(fontSize: 17),textAlign: TextAlign.center,)
+                            Text(salon?.name??"Default name",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+                            Text("Ocena\n${salon?.avgRating??4.0}",style: TextStyle(fontSize: 17),textAlign: TextAlign.center,)
                           ],
                         ),
                       ),

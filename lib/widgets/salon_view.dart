@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:provider/provider.dart';
 import 'package:salon/app_state.dart';
 import 'package:salon/models/salon.dart';
@@ -17,6 +16,7 @@ class SalonView extends StatefulWidget {
 class _SalonViewState extends State<SalonView> {
   @override
   Widget build(BuildContext context) {
+    print("http://localhost:5234/images/${widget.salon.imageUrl}");
     return GestureDetector(
       onTap: () {
         Navigator.push(context, CupertinoPageRoute(builder: (context) {
@@ -44,7 +44,9 @@ class _SalonViewState extends State<SalonView> {
             fit: StackFit.expand,
             children: [
               Image(
-                image: NetworkImage(widget.salon.imageUrl??"random"),
+                width: double.infinity,
+                height: 200,fit: BoxFit.cover,
+                image: NetworkImage("http://localhost:5234/images/${widget.salon.imageUrl}"),
                 errorBuilder: (context, error, stackTrace) {
                   return Transform.translate(
                     offset: Offset(0,-40),
@@ -88,8 +90,14 @@ class _SalonViewState extends State<SalonView> {
                             color: Colors.red,
                           ),
                           onPressed: () {
-                            widget.salon.favorite=!widget.salon.favorite!;
-                            context.read<AppState>().addFavorite(widget.salon.id!);
+                            setState(() {
+                              if(widget.salon.favorite!){
+                                context.read<AppState>().removeFavorite(widget.salon.id!);
+                              }else{
+                                context.read<AppState>().addFavorite(widget.salon.id!);
+                              }
+                              widget.salon.favorite=!widget.salon.favorite!;  
+                            });
                           },
                         )
                       ],

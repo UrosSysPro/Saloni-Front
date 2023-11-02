@@ -33,7 +33,7 @@ class AppState extends ChangeNotifier {
     storage.read(key: "user").then((value) {
       if (value != null) {
         String? jwtTokenString = jsonDecode(value)["token"];
-        print(JwtDecoder.decode(value));
+        print(jwtTokenString);
         user = User.userFromJson(JwtDecoder.decode(value), jwtTokenString);
       }
       loadingUser = false;
@@ -41,7 +41,7 @@ class AppState extends ChangeNotifier {
     });
   }
 
-  bool debugServer = true;
+  bool debugServer = false;
   User? user;
   bool loadingUser = false;
   bool errorLogInInfo = false;
@@ -133,6 +133,7 @@ class AppState extends ChangeNotifier {
 
   void logOut() {
     user = null;
+    storage.write(key: "user",value: null);
     notifyListeners();
   }
 
@@ -198,7 +199,7 @@ class AppState extends ChangeNotifier {
           Uri.parse("http://localhost:5234/api/Favorite?UserId=${user!.id}"),
           headers: headers);
       if (response.statusCode == 200) {
-        return Salon.fromSearchResultJson(response.body);
+        return Salon.fromFavoriteResultJson(response.body);
       }else{
         print("[ERROR] get favorites ${response.statusCode}  ${response.body}");
       }
@@ -215,18 +216,21 @@ class AppState extends ChangeNotifier {
       //vrati fake data
     }
 
-    var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
+    var headers = {
+      "Authorization": "Bearer ${user?.jwtTokenString}",
+      "Content-Type":"application/json"
+    };
     var body={
       "salonId":salonId,
       "userId":user!.id
     };
     try {
       var response = await http.post(
-          Uri.parse("http://localhost:5234/api/Favorite?UserId=${user!.id}"),
+          Uri.parse("http://localhost:5234/api/Favorite"),
             headers: headers,
-            body: body
+            body: jsonEncode(body)
           );
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         print("added favorite");
         return true;
       } else {
@@ -234,15 +238,44 @@ class AppState extends ChangeNotifier {
         return false;
       }
     } catch (e) {
-      print("[ERROR] AppState addFavorite nema interneta ili server ne radi");
+      print("[ERROR] AppState addFavorite nema interneta ili server ne radi${jsonEncode(e)}");
     }
     return false;
   }
 
-  Future<bool> removeFavorite(String favoriteId) async {
+  Future<String> _findFavoriteId(String salonId)async{
+    var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
+    try {
+      var response = await http.get(
+          Uri.parse("http://localhost:5234/api/Favorite?UserId=${user!.id}"),
+          headers: headers);
+      if (response.statusCode == 200) {
+        // return Salon.fromFavoriteResultJson(response.body);
+        var json=jsonDecode(response.body);
+        for(var s in json["data"]){
+          if(s["salonId"]==int.parse(salonId)){
+            int id=s["id"];
+            return "$id";
+          }
+        }
+      }else{
+        print("[ERROR] finding favorite id ${response.statusCode}  ${response.body}");
+      }
+      // print(response.body);
+    } catch (e) {
+      searchError = true;
+      print("[ERROR] AppState finding favorite ${jsonEncode(e)}");
+    }
+    return "";
+  }
+
+  Future<bool> removeFavorite(String salonId) async {
     if (debugServer) {
       //vrati fake data
     }
+    
+    String favoriteId=await _findFavoriteId(salonId);
+    print(favoriteId);
 
     var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
     
@@ -251,15 +284,15 @@ class AppState extends ChangeNotifier {
           Uri.parse("http://localhost:5234/api/Favorite/${favoriteId}"),
             headers: headers,
           );
-      if (response.statusCode == 200) {
-        print("added favorite");
+      if (response.statusCode == 204) {
+        print("removed favorite ${response.statusCode} ${response.body}");
         return true;
       } else {
-        print("[ERROR] adding favorite");
+        print("[ERROR] removing favorite ${response.statusCode} ${response.body}");
         return false;
       }
     } catch (e) {
-      print("[ERROR] AppState addFavorite nema interneta ili server ne radi");
+      print("[ERROR] AppState finding favorite ${jsonEncode(e)}");
     }
     return false;
   }
@@ -290,6 +323,28 @@ class AppState extends ChangeNotifier {
     return searchResults;
   }
 
+
+  Future<Salon> getSalon(String salonId)async{
+    if (debugServer) {
+      //vrati fake data
+    }
+
+    var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
+    try {
+      var response = await http.get(
+          Uri.parse("http://localhost:5234/api/Salon/$salonId"),
+          headers: headers);
+      if (response.statusCode == 200) {
+        return Salon.fromJson(response.body);
+      } else {
+        
+      }
+      // print(response.body);
+    } catch (e) {
+      print("[ERROR] AppState Search nema interneta ili server ne radi");
+    }
+    return Salon();
+  }
   // void signIn(String username,String password){}
   // void logIn(String username,String password){}
   // List<Salon> getSalons(String pattern){}

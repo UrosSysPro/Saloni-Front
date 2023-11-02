@@ -14,6 +14,7 @@ class SalonMarker extends StatelessWidget {
         accuracyCircleColor: Colors.transparent,
         marker: Container(
           width: 30,height: 30,
+          padding: EdgeInsets.all(3),
           decoration: BoxDecoration(
             color: Colors.pink,
             borderRadius: BorderRadius.circular(15),
@@ -25,7 +26,16 @@ class SalonMarker extends StatelessWidget {
               )
             ]
           ),
-          child: Icon(Icons.person),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image(
+              image: NetworkImage("http://localhost:5234/images/${salon.imageUrl}"),
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Icon(Icons.person);
+              },
+            ),
+          ),
         ),
         markerSize: const Size.square(30),
       ),
