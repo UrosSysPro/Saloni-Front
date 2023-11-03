@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -5,6 +6,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:salon/app_state.dart';
 import 'package:salon/models/salon.dart';
+import 'package:salon/pages/salon_page.dart';
 import 'package:salon/widgets/salon_marker.dart';
 
 class MapPage extends StatefulWidget {
@@ -45,7 +47,11 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     List<Widget> markers = saloni.map((e) => SalonMarker(salon: e,onTap: (){
       setState(() {
-        
+        if(selectedSalon==e){
+          selectedSalon=null;
+        }else{
+          selectedSalon=e;
+        }
       });
     },)).toList();
     List<Widget> mapChildren = [
@@ -85,6 +91,14 @@ class _MapPageState extends State<MapPage> {
                       });
                     },
                     child: SearchBar(
+                      leading: IconButton(
+                        iconSize: 20,
+                        splashRadius: 20,
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: (){
+                          Navigator.pop(context);
+                        },
+                      ),
                       overlayColor: MaterialStateProperty.resolveWith((states) => Colors.white),
                       // focusNode: node,
                       hintText: "Adress",
@@ -143,10 +157,106 @@ class _MapPageState extends State<MapPage> {
           ),
           selectedSalon!=null?Positioned(
             left: 20,
-            bottom: 20,right: 20,height: 300,
+            bottom: 80,right: 20,height: 200,
             child: Container(
+              clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
-                color: Colors.amber
+                color: const Color.fromARGB(255, 253, 245, 215),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [BoxShadow(
+                  offset: Offset(0,3),
+                  blurRadius: 10,
+                  color: Colors.black26
+                )]
+              ),
+              child: Stack(
+                children: [
+                  Column(
+                    children: [
+                      Expanded(child: Row(
+                        children: [
+                          Expanded(child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text("Kategorija",style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13
+                              ),),
+                              SizedBox(height: 10,),
+                              Container(
+                                width: 50,height: 50,
+                                decoration: BoxDecoration(
+                                  color: Colors.amber,
+                                  borderRadius: BorderRadius.circular(50)
+                                ),
+                                child: Icon(Icons.photo),
+                              )
+                            ]
+                          )),
+                          Expanded(child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(selectedSalon?.name??"Default name",style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18
+                              ),),
+                              Text("Ocena\n${selectedSalon?.avgRating??4.0}",textAlign: TextAlign.center,style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),),
+                            ],
+                          )),
+                          Expanded(child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text("Status",style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13
+                              ),),
+                              SizedBox(height: 10,),
+                              Container(
+                                width: 70,height: 40,
+                                decoration: BoxDecoration(
+                                  color: Color.fromARGB(255, 253, 94, 108),
+                                  borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: Center(child: Text("OPEN",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),)),
+                              )
+                            ]
+                          )),
+                        ],
+                      )),
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(builder: (context) {
+                              return SalonPage(selectedSalon!.id!);
+                            },)
+                          );
+                        },
+                        child: Container(
+                          height: 60,
+                          width: double.infinity,
+                          color: Colors.white,
+                          child: Center(
+                            child: Text("ZAKAZI TERMIN",style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                      
+                            ),),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  Positioned(
+                    right: 10,
+                    top: 10,
+                    child: Icon(Icons.close_sharp),
+                  )
+                ],
               ),
             ),
           ):SizedBox(height: 0,),
