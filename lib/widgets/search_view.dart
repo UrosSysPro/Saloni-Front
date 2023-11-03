@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:salon/app_state.dart';
+import 'package:salon/models/salon.dart';
 import 'package:salon/widgets/salon_view.dart';
 
 class SearchView extends StatefulWidget {
@@ -13,6 +14,8 @@ class SearchView extends StatefulWidget {
 
 class _SearchViewState extends State<SearchView> {
   String value = "";
+  List<Salon> saloni=[];
+  bool loading=false;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +30,7 @@ class _SearchViewState extends State<SearchView> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30),
               child: SearchBar(
+                overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
                 leading: const Padding(
                   padding: EdgeInsets.only(left: 8.0),
                   child: Icon(Icons.search),
@@ -36,8 +40,17 @@ class _SearchViewState extends State<SearchView> {
                     (states) => TextStyle(color: Colors.black54)),
                 onChanged: (value) {
                   setState(() {
+                    print("start search");
                     this.value = value;
-                    context.read<AppState>().search(value);
+                    loading=true;
+                  context.read<AppState>().search2(value).then((saloni){
+                      setState(() {
+                        print("zavrsio se search");
+                        this.saloni=saloni;
+                        loading=false;
+                      });
+                  });
+                  
                   });
                 },
               ),
@@ -109,18 +122,10 @@ class _SearchViewState extends State<SearchView> {
 //ako ima ukucano
 //////////////////////////////////////////////////////////
   Widget salonList() {
-    AppState appState=context.watch<AppState>();
-    
-    if(appState.searchError){
-      return Expanded(child: Center(child: Text("[ERROR] internet ili server"),));
-    }
-    if(appState.searching){
-      return Expanded(child: Center(child: Text("Loading..."),));
-    }
-    if(appState.searchResults.isEmpty){
+    if(saloni.isEmpty){
       return Expanded(child: Center(child: Text("Nema pronadjenih salona"),));
     }
-    var saloni=appState.searchResults;
+    
     return Expanded(
       child: ListView.builder(
           itemCount: saloni.length,

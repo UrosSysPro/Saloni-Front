@@ -48,8 +48,8 @@ class AppState extends ChangeNotifier {
   bool errorSignInInfo = false;
   bool serverError = false;
 
-  bool searching = false, searchError = false;
-  List<Salon> searchResults = [];
+  // bool searching = false, searchError = false;
+  // List<Salon> searchResults = [];
 
   Future<bool> signIn(String email, String username, String password) async {
     if (debugServer) {
@@ -137,12 +137,10 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> search(String value) async {
+  Future<List<Salon>> search2(String value) async {
     if (debugServer) {
       //vrati fake data
     }
-    searching = true;
-    notifyListeners();
 
     var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
     try {
@@ -150,18 +148,14 @@ class AppState extends ChangeNotifier {
           Uri.parse("http://localhost:5234/api/Salon?Keyword=$value"),
           headers: headers);
       if (response.statusCode == 200) {
-        searchError = false;
-        searchResults = Salon.fromSearchResultJson(response.body);
+        return Salon.fromSearchResultJson(response.body);
       } else {
-        searchError = true;
+        print("[ERROR] AppState Search nema interneta ili server ne radi");
       }
-      // print(response.body);
     } catch (e) {
-      searchError = true;
       print("[ERROR] AppState Search nema interneta ili server ne radi");
     }
-    searching = false;
-    notifyListeners();
+    return [];
   }
 
   Future<List<Salon>> loadSalonsOnMap() async {
@@ -175,14 +169,14 @@ class AppState extends ChangeNotifier {
           Uri.parse("http://localhost:5234/api/Salon?Keyword="),
           headers: headers);
       if (response.statusCode == 200) {
-        searchError = false;
+        // searchError = false;
         return Salon.fromSearchResultJson(response.body);
       } else {
-        searchError = true;
+        // searchError = true;
       }
       // print(response.body);
     } catch (e) {
-      searchError = true;
+      // searchError = true;
       print("[ERROR] AppState Search nema interneta ili server ne radi");
     }
     return [];
@@ -205,7 +199,7 @@ class AppState extends ChangeNotifier {
       }
       // print(response.body);
     } catch (e) {
-      searchError = true;
+      // searchError = true;
       print("[ERROR] AppState Favorite nema interneta ili server ne radi");
     }
     return [];
@@ -263,7 +257,7 @@ class AppState extends ChangeNotifier {
       }
       // print(response.body);
     } catch (e) {
-      searchError = true;
+      // searchError = true;
       print("[ERROR] AppState finding favorite ${jsonEncode(e)}");
     }
     return "";
@@ -313,16 +307,15 @@ class AppState extends ChangeNotifier {
       }
       // print(response.body);
     } catch (e) {
-      searchError = true;
+      // searchError = true;
       print("[ERROR] AppState Search nema interneta ili server ne radi");
     }
     return [];
   } 
+  
   Future<List<Salon>> getRecomendedForCategory(String category)async{
-    await search("");
-    return searchResults;
+    return await search2("");
   }
-
 
   Future<Salon> getSalon(String salonId)async{
     if (debugServer) {
