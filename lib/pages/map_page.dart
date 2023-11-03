@@ -19,6 +19,9 @@ class _MapPageState extends State<MapPage> {
   late FocusNode node;
   List<String> recomendations=[];
   bool showRecomendations=false;
+  // bool showSalonInfo=false;
+  Salon? selectedSalon;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -40,7 +43,11 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> markers = saloni.map((e) => SalonMarker(salon: e)).toList();
+    List<Widget> markers = saloni.map((e) => SalonMarker(salon: e,onTap: (){
+      setState(() {
+        
+      });
+    },)).toList();
     List<Widget> mapChildren = [
       TileLayer(
         maxNativeZoom: 40,
@@ -133,7 +140,16 @@ class _MapPageState extends State<MapPage> {
                 )
               ],
             ),
-          )
+          ),
+          selectedSalon!=null?Positioned(
+            left: 20,
+            bottom: 20,right: 20,height: 300,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.amber
+              ),
+            ),
+          ):SizedBox(height: 0,),
         ],
       ),
     );

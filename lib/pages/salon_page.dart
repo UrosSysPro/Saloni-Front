@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:salon/app_state.dart';
 import 'package:salon/models/salon.dart';
+import 'package:salon/pages/select_subcategory_page.dart';
 
 class SalonPage extends StatefulWidget {
   final String salonId;
@@ -74,9 +76,21 @@ class _SalonPageState extends State<SalonPage> {
                         ),
                       ),
                       SizedBox(height: 40,),
-                      kategorija("Sisanje i feniranje", () { }),
-                      kategorija("Farbanje", () { }),
-                      kategorija("Pramenovi", () { }),
+                      kategorija("Sisanje i feniranje", () { 
+                        Navigator.push(context, CupertinoPageRoute(builder: (context){
+                          return SelectSubCategoryPage(salon: salon!, categoryId:2); 
+                        }));
+                      }),
+                      kategorija("Farbanje", () { 
+                        Navigator.push(context, CupertinoPageRoute(builder: (context){
+                          return SelectSubCategoryPage(salon: salon!, categoryId:2); 
+                        }));
+                      }),
+                      kategorija("Pramenovi", () {
+                        Navigator.push(context, CupertinoPageRoute(builder: (context){
+                          return SelectSubCategoryPage(salon: salon!, categoryId:2); 
+                        }));
+                       }),
                       SizedBox(height: 40,),
                       redSlika(),
                       redSlika(),
@@ -110,36 +124,39 @@ class _SalonPageState extends State<SalonPage> {
   Widget kategorija(String name,void Function() onTap){
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
-      child: Container(
-        clipBehavior: Clip.antiAlias,
-        padding: EdgeInsets.only(left: 25),
-        width: double.infinity,
-        height: 80,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Colors.white,
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-            Transform.translate(
-              offset: Offset(20,0),
-              child: Transform.scale(
-                scale: 1.3,
-                child: Container(
-                  width: 80,height: 80,
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255,253, 94, 108),
-                    borderRadius: BorderRadius.circular(100)
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          clipBehavior: Clip.antiAlias,
+          padding: EdgeInsets.only(left: 25),
+          width: double.infinity,
+          height: 80,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.white,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+              Transform.translate(
+                offset: Offset(20,0),
+                child: Transform.scale(
+                  scale: 1.3,
+                  child: Container(
+                    width: 80,height: 80,
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255,253, 94, 108),
+                      borderRadius: BorderRadius.circular(100)
+                    ),
+                    child: Icon(Icons.chevron_right),
                   ),
-                  child: Icon(Icons.chevron_right),
                 ),
-              ),
-            )
-          ],
-        )
+              )
+            ],
+          )
+        ),
       ),
     );
   }

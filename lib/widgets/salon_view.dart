@@ -16,7 +16,7 @@ class SalonView extends StatefulWidget {
 class _SalonViewState extends State<SalonView> {
   @override
   Widget build(BuildContext context) {
-    print("http://localhost:5234/images/${widget.salon.imageUrl}");
+    // print("http://localhost:5234/images/${widget.salon.imageUrl}");
     return GestureDetector(
       onTap: () {
         Navigator.push(context, CupertinoPageRoute(builder: (context) {
@@ -92,11 +92,13 @@ class _SalonViewState extends State<SalonView> {
                           onPressed: () {
                             setState(() {
                               if(widget.salon.favorite!){
+                                widget.salon.favorite=false;
                                 context.read<AppState>().removeFavorite(widget.salon.id!);
                               }else{
+                                widget.salon.favorite=true;
                                 context.read<AppState>().addFavorite(widget.salon.id!);
                               }
-                              widget.salon.favorite=!widget.salon.favorite!;  
+                              // widget.salon.favorite=!widget.salon.favorite!;  
                             });
                           },
                         )
