@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:salon/app_state.dart';
@@ -123,7 +122,10 @@ class _SearchViewState extends State<SearchView> {
 //////////////////////////////////////////////////////////
   Widget salonList() {
     if(saloni.isEmpty){
-      return Expanded(child: Center(child: Text("Nema pronadjenih salona"),));
+      return Expanded(child: Center(child: Text("Nema pronadjenih salona",style: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: Colors.black54
+      ),),));
     }
     
     return Expanded(
