@@ -47,6 +47,7 @@ class AppState extends ChangeNotifier {
   bool errorLogInInfo = false;
   bool errorSignInInfo = false;
   bool serverError = false;
+  String api="";
 
   // bool searching = false, searchError = false;
   // List<Salon> searchResults = [];
@@ -74,7 +75,7 @@ class AppState extends ChangeNotifier {
 
     try {
       var response = await http.post(
-          Uri.parse("http://localhost:5234/api/Register"),
+          Uri.parse("http://$api/api/Register"),
           body: body,
           headers: headers);
       if (response.statusCode == 201) {
@@ -109,7 +110,7 @@ class AppState extends ChangeNotifier {
 
     try {
       var response = await http.post(
-          Uri.parse("http://localhost:5234/api/Token"),
+          Uri.parse("http://$api/api/Token"),
           body: body,
           headers: headers);
       if (response.statusCode == 200) {
@@ -145,7 +146,7 @@ class AppState extends ChangeNotifier {
     var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
     try {
       var response = await http.get(
-          Uri.parse("http://localhost:5234/api/Salon?Keyword=$value"),
+          Uri.parse("http://$api/api/Salon?Keyword=$value"),
           headers: headers);
       if (response.statusCode == 200) {
         return Salon.fromSearchResultJson(response.body);
@@ -166,7 +167,7 @@ class AppState extends ChangeNotifier {
     var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
     try {
       var response = await http.get(
-          Uri.parse("http://localhost:5234/api/Salon?Keyword="),
+          Uri.parse("http://$api/api/Salon?Keyword="),
           headers: headers);
       if (response.statusCode == 200) {
         // searchError = false;
@@ -190,7 +191,7 @@ class AppState extends ChangeNotifier {
     var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
     try {
       var response = await http.get(
-          Uri.parse("http://localhost:5234/api/Favorite?UserId=${user!.id}"),
+          Uri.parse("http://$api/api/Favorite?UserId=${user!.id}"),
           headers: headers);
       if (response.statusCode == 200) {
         return Salon.fromFavoriteResultJson(response.body);
@@ -220,7 +221,7 @@ class AppState extends ChangeNotifier {
     };
     try {
       var response = await http.post(
-          Uri.parse("http://localhost:5234/api/Favorite"),
+          Uri.parse("http://$api/api/Favorite"),
             headers: headers,
             body: jsonEncode(body)
           );
@@ -241,7 +242,7 @@ class AppState extends ChangeNotifier {
     var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
     try {
       var response = await http.get(
-          Uri.parse("http://localhost:5234/api/Favorite?UserId=${user!.id}"),
+          Uri.parse("http://$api/api/Favorite?UserId=${user!.id}"),
           headers: headers);
       if (response.statusCode == 200) {
         // return Salon.fromFavoriteResultJson(response.body);
@@ -275,7 +276,7 @@ class AppState extends ChangeNotifier {
     
     try {
       var response = await http.delete(
-          Uri.parse("http://localhost:5234/api/Favorite/${favoriteId}"),
+          Uri.parse("http://$api/api/Favorite/${favoriteId}"),
             headers: headers,
           );
       if (response.statusCode == 204) {
@@ -298,7 +299,7 @@ class AppState extends ChangeNotifier {
     var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
     try {
       var response = await http.get(
-          Uri.parse("http://localhost:5234/api/Salon?Keyword="),
+          Uri.parse("http://$api/api/Salon?Keyword="),
           headers: headers);
       if (response.statusCode == 200) {
         return Salon.fromSearchResultJson(response.body);
@@ -325,7 +326,7 @@ class AppState extends ChangeNotifier {
     var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
     try {
       var response = await http.get(
-          Uri.parse("http://localhost:5234/api/Salon/$salonId"),
+          Uri.parse("http://$api/api/Salon/$salonId"),
           headers: headers);
       if (response.statusCode == 200) {
         return Salon.fromJson(response.body);
