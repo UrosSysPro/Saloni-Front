@@ -1,6 +1,8 @@
 import "dart:convert";
 
 import 'package:flutter/material.dart';
+import 'package:salon/models/appointment.dart';
+import 'package:salon/models/order.dart';
 import 'package:salon/models/salon.dart';
 import "models/user.dart";
 import "package:http/http.dart" as http;
@@ -47,7 +49,7 @@ class AppState extends ChangeNotifier {
   bool errorLogInInfo = false;
   bool errorSignInInfo = false;
   bool serverError = false;
-  String api="";
+  String api = "";
 
   // bool searching = false, searchError = false;
   // List<Salon> searchResults = [];
@@ -74,10 +76,8 @@ class AppState extends ChangeNotifier {
     var headers = {'content-type': 'application/json'};
 
     try {
-      var response = await http.post(
-          Uri.parse("http://$api/api/Register"),
-          body: body,
-          headers: headers);
+      var response = await http.post(Uri.parse("http://$api/api/Register"),
+          body: body, headers: headers);
       if (response.statusCode == 201) {
         success = await logIn(username, password);
       } else {
@@ -109,10 +109,8 @@ class AppState extends ChangeNotifier {
     var headers = {'content-type': 'application/json'};
 
     try {
-      var response = await http.post(
-          Uri.parse("http://$api/api/Token"),
-          body: body,
-          headers: headers);
+      var response = await http.post(Uri.parse("http://$api/api/Token"),
+          body: body, headers: headers);
       if (response.statusCode == 200) {
         String? jwtTokenString = jsonDecode(response.body)["token"];
         user =
@@ -134,7 +132,7 @@ class AppState extends ChangeNotifier {
 
   void logOut() {
     user = null;
-    storage.write(key: "user",value: null);
+    storage.write(key: "user", value: null);
     notifyListeners();
   }
 
@@ -166,8 +164,7 @@ class AppState extends ChangeNotifier {
 
     var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
     try {
-      var response = await http.get(
-          Uri.parse("http://$api/api/Salon?Keyword="),
+      var response = await http.get(Uri.parse("http://$api/api/Salon?Keyword="),
           headers: headers);
       if (response.statusCode == 200) {
         // searchError = false;
@@ -195,7 +192,7 @@ class AppState extends ChangeNotifier {
           headers: headers);
       if (response.statusCode == 200) {
         return Salon.fromFavoriteResultJson(response.body);
-      }else{
+      } else {
         print("[ERROR] get favorites ${response.statusCode}  ${response.body}");
       }
       // print(response.body);
@@ -213,32 +210,28 @@ class AppState extends ChangeNotifier {
 
     var headers = {
       "Authorization": "Bearer ${user?.jwtTokenString}",
-      "Content-Type":"application/json"
+      "Content-Type": "application/json"
     };
-    var body={
-      "salonId":salonId,
-      "userId":user!.id
-    };
+    var body = {"salonId": salonId, "userId": user!.id};
     try {
-      var response = await http.post(
-          Uri.parse("http://$api/api/Favorite"),
-            headers: headers,
-            body: jsonEncode(body)
-          );
+      var response = await http.post(Uri.parse("http://$api/api/Favorite"),
+          headers: headers, body: jsonEncode(body));
       if (response.statusCode == 201) {
         print("added favorite");
         return true;
       } else {
-        print("[ERROR] adding favorite ${response.statusCode} ${response.body}");
+        print(
+            "[ERROR] adding favorite ${response.statusCode} ${response.body}");
         return false;
       }
     } catch (e) {
-      print("[ERROR] AppState addFavorite nema interneta ili server ne radi${jsonEncode(e)}");
+      print(
+          "[ERROR] AppState addFavorite nema interneta ili server ne radi${jsonEncode(e)}");
     }
     return false;
   }
 
-  Future<String> _findFavoriteId(String salonId)async{
+  Future<String> _findFavoriteId(String salonId) async {
     var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
     try {
       var response = await http.get(
@@ -246,15 +239,16 @@ class AppState extends ChangeNotifier {
           headers: headers);
       if (response.statusCode == 200) {
         // return Salon.fromFavoriteResultJson(response.body);
-        var json=jsonDecode(response.body);
-        for(var s in json["data"]){
-          if(s["salonId"]==int.parse(salonId)){
-            int id=s["id"];
+        var json = jsonDecode(response.body);
+        for (var s in json["data"]) {
+          if (s["salonId"] == int.parse(salonId)) {
+            int id = s["id"];
             return "$id";
           }
         }
-      }else{
-        print("[ERROR] finding favorite id ${response.statusCode}  ${response.body}");
+      } else {
+        print(
+            "[ERROR] finding favorite id ${response.statusCode}  ${response.body}");
       }
       // print(response.body);
     } catch (e) {
@@ -268,22 +262,23 @@ class AppState extends ChangeNotifier {
     if (debugServer) {
       //vrati fake data
     }
-    
-    String favoriteId=await _findFavoriteId(salonId);
+
+    String favoriteId = await _findFavoriteId(salonId);
     print(favoriteId);
 
     var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
-    
+
     try {
       var response = await http.delete(
-          Uri.parse("http://$api/api/Favorite/${favoriteId}"),
-            headers: headers,
-          );
+        Uri.parse("http://$api/api/Favorite/${favoriteId}"),
+        headers: headers,
+      );
       if (response.statusCode == 204) {
         print("removed favorite ${response.statusCode} ${response.body}");
         return true;
       } else {
-        print("[ERROR] removing favorite ${response.statusCode} ${response.body}");
+        print(
+            "[ERROR] removing favorite ${response.statusCode} ${response.body}");
         return false;
       }
     } catch (e) {
@@ -291,15 +286,14 @@ class AppState extends ChangeNotifier {
     }
     return false;
   }
-  
-  Future<List<Salon>> getRecomended()async{
+
+  Future<List<Salon>> getRecomended() async {
     if (debugServer) {
       //vrati fake data
     }
     var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
     try {
-      var response = await http.get(
-          Uri.parse("http://$api/api/Salon?Keyword="),
+      var response = await http.get(Uri.parse("http://$api/api/Salon?Keyword="),
           headers: headers);
       if (response.statusCode == 200) {
         return Salon.fromSearchResultJson(response.body);
@@ -312,32 +306,116 @@ class AppState extends ChangeNotifier {
       print("[ERROR] AppState Search nema interneta ili server ne radi");
     }
     return [];
-  } 
-  
-  Future<List<Salon>> getRecomendedForCategory(String category)async{
+  }
+
+  Future<List<Salon>> getRecomendedForCategory(String category) async {
     return await search2("");
   }
 
-  Future<Salon> getSalon(String salonId)async{
+  Future<Salon> getSalon(String salonId) async {
     if (debugServer) {
       //vrati fake data
     }
 
     var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
     try {
-      var response = await http.get(
-          Uri.parse("http://$api/api/Salon/$salonId"),
+      var response = await http.get(Uri.parse("http://$api/api/Salon/$salonId"),
           headers: headers);
       if (response.statusCode == 200) {
         return Salon.fromJson(response.body);
-      } else {
-        
-      }
+      } else {}
       // print(response.body);
     } catch (e) {
       print("[ERROR] AppState Search nema interneta ili server ne radi");
     }
     return Salon();
+  }
+
+  Future<List<Order>> getOrders() async {
+    return [
+      Order(
+          customerName: "Anna",
+          time: DateTime.now().copyWith(hour: 16),
+          price: 950),
+      Order(
+          customerName: "Anna",
+          time: DateTime.now().copyWith(hour: 17),
+          price: 950),
+      Order(
+          customerName: "Anna",
+          time: DateTime.now().copyWith(hour: 11),
+          price: 950),
+      Order(
+          customerName: "Anna",
+          time: DateTime.now().copyWith(hour: 20),
+          price: 950),
+      Order(
+          customerName: "Anna",
+          time: DateTime.now().copyWith(hour: 13),
+          price: 950),
+    ];
+  }
+
+  Future<bool> createAppointment(DateTime date) async {
+    if (debugServer) {
+      //vrati fake data
+    }
+  
+
+    var headers = {
+      "Authorization": "Bearer ${user?.jwtTokenString}",
+      "Accept":"application/json"
+    };
+    var body = {
+      "staffId": user?.id,
+      "dateAndTime": "${date.toIso8601String()}Z"
+    };
+    try {
+      var response = await http.post(
+        Uri.parse("http://$api/api/StaffAppointment"),
+        headers: headers,
+        body: body,
+      );
+      if (response.statusCode == 201) {
+        return true;
+      } else {
+        print(
+            "[ERROR] AppState createAppointment ${response.statusCode}  ${response.body}");
+        return false;
+      }
+      // print(response.body);
+    } catch (e) {
+      print("[ERROR] AppState Search nema interneta ili server ne radi");
+      return false;
+    }
+  }
+  Future<List<Appointment>?> getAppointments()async{
+    if (debugServer) {
+      //vrati fake data
+    }
+  
+
+    var headers = {
+      "Authorization": "Bearer ${user?.jwtTokenString}",
+      // "Accept":"application/json"
+    };
+    try {
+      var response = await http.get(
+        Uri.parse("http://$api/api/StaffAppointment?staffId=${user?.id}"),
+        headers: headers
+      );
+      if (response.statusCode == 200) {
+        return Appointment.fromJson(jsonDecode(response.body));
+      } else {
+        print(
+            "[ERROR] AppState getAppointments ${response.statusCode}  ${response.body}");
+        return null;
+      }
+      // print(response.body);
+    } catch (e) {
+      print("[ERROR] AppState getAppointments nema interneta ili server ne radi");
+      return null;
+    }
   }
   // void signIn(String username,String password){}
   // void logIn(String username,String password){}

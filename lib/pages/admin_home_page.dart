@@ -24,6 +24,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
         if(index==3)return const AdminAccountView();
         return Container(color: Colors.red,);
       }),
+
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
           setState(() {

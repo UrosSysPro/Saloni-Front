@@ -31,6 +31,10 @@ class _SalonPageState extends State<SalonPage> {
 
   @override
   Widget build(BuildContext context) {
+    // var kategorije=Column(
+    //   mainAxisSize: MainAxisSize.min,
+    //   // children: List<int>.generate(salon, (index) => null),
+    // );
     return SafeArea(
       child: Scaffold(
         backgroundColor:const Color.fromARGB(255, 253, 245, 215),
