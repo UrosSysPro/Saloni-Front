@@ -3,6 +3,7 @@ import "dart:convert";
 import 'package:flutter/material.dart';
 import 'package:salon/models/appointment.dart';
 import 'package:salon/models/order.dart';
+import 'package:salon/models/reservation.dart';
 import 'package:salon/models/salon.dart';
 import "models/user.dart";
 import "package:http/http.dart" as http;
@@ -417,98 +418,38 @@ class AppState extends ChangeNotifier {
       return null;
     }
   }
-  // void signIn(String username,String password){}
-  // void logIn(String username,String password){}
-  // List<Salon> getSalons(String pattern){}
-  // List<Salon> getRecomendedSalonsForUser(String userId){}
-  // List<Salon> getRecomendedSalonsForUser(String userId,String categoryId){}
-  // List<Salon> getFavorites(String userId){}
-  // List<Order> getUserOrderHistory(String userId){}
-  // void enterPromoCode(String userId,String code){}
-
-  /*
-  //////////////////////////////////////////////////////////
-    token - user imageUrl
-    /////////////////////////////////////////////////////////
-    searchSalon - [
-      {
-        id,
-        name,
-        description,
-        rating,
-        imageUrl
-      },
-      {
-        id,
-        name,
-        description,
-        rating,
-        imageUrl
-      },
-    ]
-    //////////////////////////////////////////////////
-    favoritesForUser - [
-      {
-        id,
-        name,
-        description,
-        rating,
-      },
-      {
-        id,
-        name,
-        description,
-        rating,
-      },
-    ]
-    vraca listu informacija o salonima koje je korisnik lajkovao
-  ///////////////////////////////////////////////////////////
-    salonInfo - {
-        id,
-        name,
-        description,
-        rating,
-        salonProfileImgUrl,
-        float lat,
-        float lng,
-        string adresa,
-        services:[
-          {
-            id,
-            name:"Sisanje i feniranje",
-          },
-          {
-            id,
-            name:"Farbanje"
-          }
-        ],
-        images[
-          url,url,url,url
-        ]
+  
+  Future<List<Reservation>?> getReservations()async{
+    if (debugServer) {
+      //vrati fake data
+    }
+    var headers = {
+      "Authorization": "Bearer ${user?.jwtTokenString}",
+      // "Accept":"application/json"
+    };
+    try {
+      var response = await http.get(
+        Uri.parse("http://$api/api/Reservaiton"),
+        headers: headers
+      );
+      if (response.statusCode == 200) {
+        return Reservation.fromJson(jsonDecode(response.body));
+      } else {
+        print(
+            "[ERROR] AppState getReservations ${response.statusCode}  ${response.body}");
+        return null;
       }
-      //informacije o salonu, sta moze da se naruci i one slike na dnu
- ///////////////////////////////////////////////////////////// 
-    near user
- [
-      {
-        id,
-        lat,
-        lng,
-        name,
-        description,
-        rating,
-        imageUrl
-      },
-      {
-        id,
-        lat,
-        lng,
-        name,
-        description,
-        rating,
-        imageUrl
-      },
-    ]
-    
-   */
+      // print(response.body);
+    } catch (e) {
+      print("[ERROR] AppState getReservations nema interneta ili server ne radi");
+      return null;
+    }
+  }
+
+  // Future<http.Response> apiRequest(String method,String path,{Map<String,String>? headers,Object? body})async{
+  //   if(method=="POST"){
+
+  //   }
+
+  // }
 }

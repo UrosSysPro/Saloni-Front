@@ -1,12 +1,13 @@
-import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:salon/app_state.dart';
 import 'package:salon/models/appointment.dart';
-import 'package:salon/models/order.dart';
+// import 'package:salon/models/order.dart';
+import 'package:salon/models/reservation.dart';
+import 'package:salon/widgets/appointment_view.dart';
+// ignore: library_prefixes
 import 'package:salon/widgets/filled_button.dart' as Salon;
+import 'package:salon/widgets/reservation_view.dart';
 
 class CalendarView extends StatefulWidget {
   const CalendarView({Key? key}) : super(key: key);
@@ -18,22 +19,26 @@ class CalendarView extends StatefulWidget {
 class _CalendarViewState extends State<CalendarView> {
   String selectedDate = "Wed Nov 7 2023";
 
-  List<Order> orders = [];
+  // List<Order> orders = [];
   List<Appointment>? appointments = [];
+  List<Reservation>? reservations = [];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    context.read<AppState>().getOrders().then((value) {
-      setState(() {
-        orders = value;
-      });
-    });
+    // context.read<AppState>().getOrders().then((value) {
+    //   setState(() {
+    //     orders = value;
+    //   });
+    // });
     context.read<AppState>().getAppointments().then((value) {
       setState(() {
-        // print(value.toString());
         appointments = value;
+      });
+    });
+    context.read<AppState>().getReservations().then((value) {
+      setState(() {
+        reservations = value;
       });
     });
   }
@@ -48,7 +53,7 @@ class _CalendarViewState extends State<CalendarView> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: [
-              SizedBox(
+              const SizedBox(
                 width: double.infinity,
               ),
               Padding(
@@ -71,91 +76,53 @@ class _CalendarViewState extends State<CalendarView> {
                               })),
                       IconButton(
                         onPressed: () {},
-                        icon: Icon(Icons.date_range),
+                        icon: const Icon(Icons.date_range),
                         color: Colors.pink,
                       )
                     ],
                   ),
                 ),
               ),
-              FlutterLogo(
+              const FlutterLogo(
                 size: 50,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: appointments?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 8),
-                      child: Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 5),
-                                decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, 253, 94, 108),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Text(
-                                  "${appointments?[index].dateTime?.hour}/${appointments?[index].dateTime?.minute}",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: 12),
-                                )),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                // Container(
-                                //     padding: EdgeInsets.symmetric(
-                                //         horizontal: 10, vertical: 5),
-                                //     decoration: BoxDecoration(
-                                //       color: Color.fromARGB(255, 253, 94, 108),
-                                //       borderRadius: BorderRadius.circular(20),
-                                //     ),
-                                //     child: Text(
-                                //       "${orders[index].customerName}",
-                                //       style: TextStyle(
-                                //           fontWeight: FontWeight.bold,
-                                //           color: Colors.white,
-                                //           fontSize: 12),
-                                //     )),
-                                // SizedBox(
-                                //   width: 20,
-                                // ),
-                                Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 5),
-                                    decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 253, 94, 108),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Text(
-                                      "Feniranje i kosa nzm",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                          fontSize: 12),
-                                    )),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                  },
+                child: ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(30),
+                      child: Center(
+                          child: Text(
+                        "Appointments",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      )),
+                    ),
+                    Column(
+                      children: appointments?.map((appointment) => 
+                        AppointmentView(appointment)).toList() ?? [],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(30),
+                      child: Center(
+                          child: Text(
+                        "Reservations",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      )),
+                    ),
+                    Column(
+                      children: reservations
+                              ?.map((reservation) => ReservationView(reservation))
+                              .toList() ??
+                          [],
+                    ),
+                  ],
                 ),
+                
               ),
             ],
           ),
@@ -184,7 +151,7 @@ class _CalendarViewState extends State<CalendarView> {
                           print(success);
                         }
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.add,
                         color: Colors.orange,
                       ),
@@ -200,7 +167,7 @@ class _CalendarViewState extends State<CalendarView> {
   Widget builder(BuildContext) {
     return Wrap(
       children: [
-        Padding(
+        const Padding(
           padding: const EdgeInsets.symmetric(vertical: 30),
           child: Center(
             child: Text(
