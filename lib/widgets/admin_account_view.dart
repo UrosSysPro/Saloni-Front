@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:salon/app_state.dart';
+import 'package:salon/pages/admin_edit_account.dart';
 
 class AdminAccountView extends StatelessWidget {
   const AdminAccountView({Key? key}) : super(key: key);
@@ -25,7 +27,11 @@ class AdminAccountView extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          listItem(Icon(Icons.person), "Izmenite nalog"),
+          listItem(Icon(Icons.person), "Izmenite nalog",onTap: (){
+            Navigator.push(context, CupertinoPageRoute(builder: (context){
+              return AdminEditAccount();
+            }));
+          }),
           listItem(
               Icon(Icons.add_circle_outline_outlined), "Dodajte fotografije"),
           listItem(Icon(Icons.add_circle_outline_outlined), "Dodajte uslugu"),

@@ -2,7 +2,6 @@ import "dart:convert";
 
 import 'package:flutter/material.dart';
 import 'package:salon/models/appointment.dart';
-import 'package:salon/models/order.dart';
 import 'package:salon/models/reservation.dart';
 import 'package:salon/models/salon.dart';
 import "models/user.dart";
@@ -332,31 +331,6 @@ class AppState extends ChangeNotifier {
     return Salon();
   }
 
-  Future<List<Order>> getOrders() async {
-    return [
-      Order(
-          customerName: "Anna",
-          time: DateTime.now().copyWith(hour: 16),
-          price: 950),
-      Order(
-          customerName: "Anna",
-          time: DateTime.now().copyWith(hour: 17),
-          price: 950),
-      Order(
-          customerName: "Anna",
-          time: DateTime.now().copyWith(hour: 11),
-          price: 950),
-      Order(
-          customerName: "Anna",
-          time: DateTime.now().copyWith(hour: 20),
-          price: 950),
-      Order(
-          customerName: "Anna",
-          time: DateTime.now().copyWith(hour: 13),
-          price: 950),
-    ];
-  }
-
   Future<bool> createAppointment(DateTime date) async {
     if (debugServer) {
       //vrati fake data
@@ -365,17 +339,21 @@ class AppState extends ChangeNotifier {
 
     var headers = {
       "Authorization": "Bearer ${user?.jwtTokenString}",
-      "Accept":"application/json"
+      "Accept":"application/json",
+      "Content-Type":"application/json"
     };
     var body = {
       "staffId": user?.id,
-      "dateAndTime": "${date.toIso8601String()}Z"
+      "dateAndTime": date.toIso8601String()
     };
+    print(headers);
+    print(jsonEncode(body));
+    print("http://$api/api/StaffAppointment");
     try {
       var response = await http.post(
         Uri.parse("http://$api/api/StaffAppointment"),
         headers: headers,
-        body: body,
+        body: jsonEncode(body),
       );
       if (response.statusCode == 201) {
         return true;
@@ -386,7 +364,7 @@ class AppState extends ChangeNotifier {
       }
       // print(response.body);
     } catch (e) {
-      print("[ERROR] AppState Search nema interneta ili server ne radi");
+      print("[ERROR] AppState Search nema interneta ili server ne radi ${e}");
       return false;
     }
   }
