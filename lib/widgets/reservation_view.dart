@@ -8,6 +8,17 @@ class ReservationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    late String hour,minute;
+    if((reservation.date?.hour??0)<10){
+      hour="0${reservation.date?.hour??0}";
+    }else{
+      hour=reservation.date?.hour.toString()??"00";
+    }
+    if((reservation.date?.minute??0)<10){
+      minute="0${reservation.date?.minute??0}";
+    }else{
+      minute=reservation.date?.minute.toString()??"00";
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
       child: Container(
@@ -27,7 +38,7 @@ class ReservationView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  "${reservation.date?.hour}/${reservation.date?.minute}",
+                  "$hour:$minute",
                   style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,

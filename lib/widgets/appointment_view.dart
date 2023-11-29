@@ -8,6 +8,17 @@ class AppointmentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    late String hour, minute;
+    if ((appointment.dateTime?.hour ?? 0) < 10) {
+      hour = "0${appointment.dateTime?.hour ?? 0}";
+    } else {
+      hour = appointment.dateTime?.hour.toString() ?? "00";
+    }
+    if ((appointment.dateTime?.minute ?? 0) < 10) {
+      minute = "0${appointment.dateTime?.minute ?? 0}";
+    } else {
+      minute = appointment.dateTime?.minute.toString() ?? "00";
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
       child: Container(
@@ -27,48 +38,26 @@ class AppointmentView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  "${appointment.dateTime?.hour}/${appointment.dateTime?.minute}",
+                  "$hour:$minute",
                   style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                       fontSize: 12),
                 )),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Container(
-                //     padding: EdgeInsets.symmetric(
-                //         horizontal: 10, vertical: 5),
-                //     decoration: BoxDecoration(
-                //       color: Color.fromARGB(255, 253, 94, 108),
-                //       borderRadius: BorderRadius.circular(20),
-                //     ),
-                //     child: Text(
-                //       "${orders[index].customerName}",
-                //       style: TextStyle(
-                //           fontWeight: FontWeight.bold,
-                //           color: Colors.white,
-                //           fontSize: 12),
-                //     )),
-                // SizedBox(
-                //   width: 20,
-                // ),
-                Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 253, 94, 108),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Text(
-                      "Cancel",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 12),
-                    )),
-              ],
-            )
+            Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 253, 94, 108),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Text(
+                  "Cancel",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 12),
+                ))
           ],
         ),
       ),

@@ -17,7 +17,9 @@ class CalendarView extends StatefulWidget {
 }
 
 class _CalendarViewState extends State<CalendarView> {
-  String selectedDate = "Wed Nov 7 2023";
+  // String selectedDate = "Wed Nov 7 2023";
+  DateTime selectedDate = DateTime.now();
+  List<DateTime> dates = [];
 
   // List<Order> orders = [];
   List<Appointment>? appointments = [];
@@ -41,6 +43,11 @@ class _CalendarViewState extends State<CalendarView> {
         reservations = value;
       });
     });
+    dates = List<int>.generate(14, (index) => index - 7).map((e) {
+      DateTime newDate = DateTime.now().add(Duration(days: e));
+      return newDate;
+    }).toList();
+    selectedDate = dates[6];
   }
 
   @override
@@ -65,14 +72,17 @@ class _CalendarViewState extends State<CalendarView> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       DropdownButton(
+                        selectedItemBuilder: (context){
+                          return [Text(selectedDate.toString())];
+                        },
                           value: selectedDate,
-                          items: List<int>.generate(20, (index) => index + 7)
-                              .map((e) => DropdownMenuItem(
-                                  value: "Wed Nov $e 2023",
-                                  child: Text("Wed Nov $e 2023")))
-                              .toList(),
+                          items: dates.map((e) {
+                            return DropdownMenuItem(
+                                value: e,
+                                child: Text(e.toString()));
+                          }).toList(),
                           onChanged: (value) => setState(() {
-                                selectedDate = value ?? "default";
+                                selectedDate = value ?? DateTime.now();
                               })),
                       IconButton(
                         onPressed: () {},
@@ -102,8 +112,11 @@ class _CalendarViewState extends State<CalendarView> {
                       )),
                     ),
                     Column(
-                      children: appointments?.map((appointment) => 
-                        AppointmentView(appointment)).toList() ?? [],
+                      children: appointments
+                              ?.map(
+                                  (appointment) => AppointmentView(appointment))
+                              .toList() ??
+                          [],
                     ),
                     Padding(
                       padding: const EdgeInsets.all(30),
@@ -116,13 +129,13 @@ class _CalendarViewState extends State<CalendarView> {
                     ),
                     Column(
                       children: reservations
-                              ?.map((reservation) => ReservationView(reservation))
+                              ?.map(
+                                  (reservation) => ReservationView(reservation))
                               .toList() ??
                           [],
                     ),
                   ],
                 ),
-                
               ),
             ],
           ),
