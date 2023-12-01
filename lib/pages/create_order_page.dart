@@ -22,7 +22,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         children: [
           Container(
             // height: 70,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -34,10 +34,10 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                     width: 70,
                     height: 30,
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 253, 94, 108),
+                      color: const Color.fromARGB(255, 253, 94, 108),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Center(
+                    child: const Center(
                       child: Icon(
                         Icons.chevron_left,
                         color: Colors.white,
@@ -49,30 +49,30 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                   offset: Offset(0, 10),
                   child: Text(
                     widget.salon.name ?? "Default name",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 70,
                 ),
               ],
             ),
           ),
-          Align(
+          const Align(
             heightFactor: 1,
             child: Text(
               "Februar",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 70,
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             height: 70,
             child: Row(
               // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -89,16 +89,22 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                     children: [
                       Text(
                         dani[e],
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Container(
                         width: 30,
                         height: 30,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: e == dan
+                              ? Color.fromARGB(255, 253, 94, 108)
+                              : Colors.transparent,
+                        ),
                         child: Center(
                           child: Text(
                             "${11 + e}",
@@ -106,12 +112,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                                 fontWeight: FontWeight.bold,
                                 color: e == dan ? Colors.white : Colors.black),
                           ),
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: e == dan
-                              ? Color.fromARGB(255, 253, 94, 108)
-                              : Colors.transparent,
                         ),
                       )
                     ],
@@ -140,6 +140,12 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                               },
                               child: Container(
                                 width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: (e == x && f == y)
+                                      ? Color.fromARGB(255, 253, 94, 108)
+                                      : Colors.white,
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
                                 child: Center(
                                     child: Text(
                                   "${e + f * 4 + 8}:00",
@@ -149,12 +155,6 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                                           ? Colors.white
                                           : Colors.black),
                                 )),
-                                decoration: BoxDecoration(
-                                  color: (e == x && f == y)
-                                      ? Color.fromARGB(255, 253, 94, 108)
-                                      : Colors.white,
-                                  borderRadius: BorderRadius.circular(3),
-                                ),
                               ),
                             )));
                   }).toList(),
@@ -162,7 +162,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
               }).toList(),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Align(
@@ -176,7 +176,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                     child: Center(
                         child: Text(
                       widget.salon.name ?? "Default name",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ))),
               )),
           Align(
@@ -194,7 +194,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                     image: NetworkImage(
                         "http://localhost:5234/images/${widget.salon.imageUrl}"),
                     errorBuilder: (context, error, stackTrace) {
-                      return Icon(Icons.person);
+                      return const Icon(Icons.person);
                     },
                   ),
                 ),
@@ -202,22 +202,22 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 30),
             height: 70,
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     "Total",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
-                      color: Color.fromARGB(255, 253, 94, 108),
+                      color: const Color.fromARGB(255, 253, 94, 108),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    child: Text(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: const Text(
                       "950,00",
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.white),
@@ -237,10 +237,10 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  color: Color.fromARGB(255, 253, 94, 108),
+                  color: const Color.fromARGB(255, 253, 94, 108),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                child: Center(
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                child: const Center(
                   child: Text(
                     "Potvrdi",
                     style: TextStyle(

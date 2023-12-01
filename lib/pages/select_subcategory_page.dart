@@ -1,23 +1,40 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:salon/models/salon.dart';
+import 'package:salon/models/service.dart';
 import 'package:salon/pages/create_order_page.dart';
 
 class SelectSubCategoryPage extends StatelessWidget {
   final Salon salon;
-  final int categoryId;
+  final int serviceId;
   const SelectSubCategoryPage(
-      {super.key, required this.salon, required this.categoryId});
+      {super.key, required this.salon, required this.serviceId});
 
   @override
   Widget build(BuildContext context) {
+    int salonServiceId=-1;
+    for(int i=0;i<(salon.services?.length??-1);i++){
+      if(salon.services?[i].serviceId==serviceId){
+        salonServiceId=salon.services?[i].id??-1;
+        break;
+      }
+    }
+    bool isLeaf=true;
+    for(int i=0;i<(salon.services?.length??-1);i++){
+      if(salon.services?[i].parentId==salonServiceId){
+        isLeaf=false;
+        break;
+      }
+    }
+    if(isLeaf)return CreateOrderPage(salon, serviceId);
+    List<Service> subservices=salon.services?.where((element) => element.parentId==salonServiceId).toList()??[];
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 253, 245, 215),
       body: Column(
         children: [
           Container(
             // height: 70,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -29,10 +46,10 @@ class SelectSubCategoryPage extends StatelessWidget {
                     width: 70,
                     height: 30,
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 253, 94, 108),
+                      color: const Color.fromARGB(255, 253, 94, 108),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Center(
+                    child: const Center(
                       child: Icon(
                         Icons.chevron_left,
                         color: Colors.white,
@@ -41,10 +58,10 @@ class SelectSubCategoryPage extends StatelessWidget {
                   ),
                 ),
                 Transform.translate(
-                  offset: Offset(0, 10),
+                  offset: const Offset(0, 10),
                   child: Text(
                     salon.name ?? "Default name",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                     ),
@@ -54,10 +71,10 @@ class SelectSubCategoryPage extends StatelessWidget {
                   width: 70,
                   height: 30,
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 253, 94, 108),
+                    color: const Color.fromARGB(255, 253, 94, 108),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Icon(
                       Icons.search,
                       color: Colors.white,
@@ -69,7 +86,7 @@ class SelectSubCategoryPage extends StatelessWidget {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: 6,
+              itemCount: subservices.length,
               itemBuilder: (context, index) {
                 return Padding(
                   padding:
@@ -77,18 +94,18 @@ class SelectSubCategoryPage extends StatelessWidget {
                   child: GestureDetector(
                     onTap: (){
                       Navigator.push(context, CupertinoPageRoute(builder: (context) {
-                        return CreateOrderPage(salon,categoryId);
+                        return CreateOrderPage(salon,subservices[index].serviceId);
                       },));
                     },
                     child: Container(
                       clipBehavior: Clip.antiAlias,
                       width: double.infinity,
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      padding:const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
+                          boxShadow: const [
+                             BoxShadow(
                                 offset: Offset(0, 2),
                                 blurRadius: 5,
                                 color: Colors.black26)
@@ -97,19 +114,19 @@ class SelectSubCategoryPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "SubCategory$index",
-                            style: TextStyle(
+                            subservices[index].name,
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                   
                           Container(
                             decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 253, 94, 108),
+                              color: const Color.fromARGB(255, 253, 94, 108),
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
-                            child: Text("950,00",style: TextStyle(
+                            padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+                            child: Text("${subservices[index].price}",style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 12
