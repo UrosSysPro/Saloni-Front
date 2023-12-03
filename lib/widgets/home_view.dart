@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:salon/app_state.dart';
+import 'package:salon/pages/choose_category_page.dart';
 import 'package:salon/pages/map_page.dart';
+import 'package:salon/pages/sorting_parameters_page.dart';
 import 'package:salon/widgets/category_list_item.dart';
 import 'package:salon/widgets/discoutnt_ad_card.dart';
 import 'package:salon/widgets/home_category_view.dart';
@@ -88,11 +90,19 @@ class _HomeViewState extends State<HomeView> {
                           ),
                           Salon.Chip(
                             text: "Sortiraj",
-                            onTap: (){},
+                            onTap: (){
+                              Navigator.push(context, CupertinoPageRoute(builder: (context){
+                                return SortingParameterPage();
+                              }));
+                            },
                           ),
                           Salon.Chip(
                             text: "Kategorije",
-                            onTap: (){},
+                            onTap: (){
+                              Navigator.push(context, CupertinoPageRoute(builder: (context){
+                                return ChooseCategoryPage();
+                              }));
+                            },
                           ),
                         ],
                       ),
@@ -147,7 +157,6 @@ class _HomeViewState extends State<HomeView> {
                     HomeSection(sectionName: "Preporuceni", child: Column(
                       children: saloni?.map((e) => SalonView(salon: e)).toList()??[],
                     )),
-                    SizedBox(height: 200,)
                   ],
                 )
               ],

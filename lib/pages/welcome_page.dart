@@ -20,50 +20,69 @@ class WelcomePage extends StatelessWidget {
               child: topPicture(),
               flex: 1,
             ),
-            SizedBox(height: 30,),
+            SizedBox(
+              height: 30,
+            ),
             prviText("Pronadji svoj \nomiljeni salon ovde"),
-            SizedBox(height: 30,),
+            SizedBox(
+              height: 30,
+            ),
             drugiText(
                 "Istrazi neke od najboljih salona i\n zakazi svoj termin u dva klika"),
-            SizedBox(height: 30,),
+            SizedBox(
+              height: 30,
+            ),
             Container(
+              clipBehavior: Clip.antiAliasWithSaveLayer,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Color.fromARGB(255, 233, 236, 244)
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  GestureDetector(
-                    onTap: (){
-                      Navigator.push(context, CupertinoPageRoute(builder: (context){
-                        return SigninPage();
-                      }));
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 20,horizontal: 30),
+                  borderRadius: BorderRadius.circular(20),
+                  color: Color.fromARGB(255, 233, 236, 244)),
+              child: Material(
+                color: Colors.transparent,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white),
+                      child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(context,
+                                  CupertinoPageRoute(builder: (context) {
+                                return SigninPage();
+                              }));
+                            },
+                            child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 20, horizontal: 30),
+                                child: loginButtonText("Registruj se")),
+                          )),
+                    ),
+                    InkWell(
+                      borderRadius: BorderRadius.circular(20),
+                      onTap: () {
+                        Navigator.push(context,
+                            CupertinoPageRoute(builder: (context) {
+                          return LoginPage();
+                        }));
+                      },
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                        child: loginButtonText("Uloguj se"),
                       ),
-                      child: loginButtonText("Registruj se"),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: (){
-                      Navigator.push(context, CupertinoPageRoute(builder: (context){
-                        return LoginPage();
-                      }));
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20,horizontal: 30),
-                      child: loginButtonText("Uloguj se"),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
-            SizedBox(height: 30,),
+            SizedBox(
+              height: 30,
+            ),
           ],
         ),
       ),
@@ -83,7 +102,8 @@ class WelcomePage extends StatelessWidget {
               ])),
     );
   }
-  Widget prviText(String text){
+
+  Widget prviText(String text) {
     return Text(
       text,
       style: TextStyle(
@@ -93,24 +113,19 @@ class WelcomePage extends StatelessWidget {
       textAlign: TextAlign.center,
     );
   }
-  Widget drugiText(String text){
+
+  Widget drugiText(String text) {
     return Text(
       text,
       textAlign: TextAlign.center,
-      style: TextStyle(
-        color: Colors.black54,
-        fontSize: 15
-      ),
+      style: TextStyle(color: Colors.black54, fontSize: 15),
     );
   }
-  Widget loginButtonText(String text){
+
+  Widget loginButtonText(String text) {
     return Text(
       text,
-      style: TextStyle(
-        fontWeight: FontWeight.w700,
-        fontSize: 16
-      ),
+      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
     );
   }
-  
 }

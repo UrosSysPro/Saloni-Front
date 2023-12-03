@@ -18,21 +18,26 @@ class FilledButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: padding,
-        decoration: BoxDecoration(
-          color:enabled?Color.fromARGB(255, 253, 94, 108):Colors.grey,
-          borderRadius: BorderRadius.circular(radius)
-        ),
-        child: Center(
-          child: Text(
-            text,
-            style: TextStyle(
-              color: enabled?Colors.white:Colors.black54,
-              fontWeight: FontWeight.bold,
-              fontSize: fontSize
+    return Container(
+      
+      decoration: BoxDecoration(
+        color:enabled?Color.fromARGB(255, 253, 94, 108):Colors.grey,
+        borderRadius: BorderRadius.circular(radius)
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(padding: padding,
+            child: Center(
+              child: Text(
+                text,
+                style: TextStyle(
+                  color: enabled?Colors.white:Colors.black54,
+                  fontWeight: FontWeight.bold,
+                  fontSize: fontSize
+                ),
+              ),
             ),
           ),
         ),

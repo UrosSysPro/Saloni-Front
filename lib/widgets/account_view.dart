@@ -48,7 +48,7 @@ class AccountView extends StatelessWidget {
                 color: Colors.transparent,
                 child: Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                      const EdgeInsets.symmetric(vertical: 20),
                   child: Column(
                     children: [
                       listItem("Izaberite karticu", () {
@@ -147,21 +147,24 @@ class AccountView extends StatelessWidget {
   Widget listItem(String text, void Function() onTap) {
     return InkWell(
       onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-        height: 50,
-        decoration: BoxDecoration(
-            border:
-                Border(bottom: BorderSide(width: 2, color: Colors.black12))),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              text,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Icon(Icons.chevron_right)
-          ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+          height: 50,
+          decoration: BoxDecoration(
+              border:
+                  Border(bottom: BorderSide(width: 2, color: Colors.black12))),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                text,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Icon(Icons.chevron_right)
+            ],
+          ),
         ),
       ),
     );
