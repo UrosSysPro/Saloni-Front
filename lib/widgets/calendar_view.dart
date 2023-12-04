@@ -19,35 +19,37 @@ class CalendarView extends StatefulWidget {
 class _CalendarViewState extends State<CalendarView> {
   // String selectedDate = "Wed Nov 7 2023";
   DateTime selectedDate = DateTime.now();
+  DateTime dayAfterSelected = DateTime.now();
   List<DateTime> dates = [];
 
   // List<Order> orders = [];
-  List<Appointment>? appointments = [];
-  List<Reservation>? reservations = [];
+  List<Appointment>? appointments = [], todaysAppointsments = [];
+  List<Reservation>? reservations = [], todaysReservations = [];
+  List<String> months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "Maj",
+    "Jun",
+    "Jul",
+    "Avg",
+    "Sep",
+    "Okt",
+    "Nov",
+    "Dec",
+  ];
 
   @override
   void initState() {
     super.initState();
-    // context.read<AppState>().getOrders().then((value) {
-    //   setState(() {
-    //     orders = value;
-    //   });
-    // });
-    context.read<AppState>().getAppointments().then((value) {
-      setState(() {
-        appointments = value;
-      });
-    });
-    context.read<AppState>().getReservations().then((value) {
-      setState(() {
-        reservations = value;
-      });
-    });
+    reload();
     dates = List<int>.generate(14, (index) => index - 7).map((e) {
-      DateTime newDate = DateTime.now().add(Duration(days: e));
+      DateTime newDate = DateTime.now().add(Duration(days: e)).copyWith(
+          hour: 0, minute: 0, second: 0, millisecond: 0, microsecond: 0);
       return newDate;
     }).toList();
-    selectedDate = dates[6];
+    selectDate(dates[7]);
   }
 
   @override
@@ -60,36 +62,40 @@ class _CalendarViewState extends State<CalendarView> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: [
-              const SizedBox(
-                width: double.infinity,
-              ),
               Padding(
-                padding: const EdgeInsets.only(top: 40, bottom: 20),
-                child: SizedBox(
-                  height: 50,
-                  // width: ,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      DropdownButton(
-                        selectedItemBuilder: (context){
-                          return [Text(selectedDate.toString())];
-                        },
-                          value: selectedDate,
-                          items: dates.map((e) {
-                            return DropdownMenuItem(
+                padding: const EdgeInsets.only(
+                    top: 40, bottom: 20, left: 30, right: 30),
+                child: Center(
+                  child: SizedBox(
+                    width: 150,
+                    height: 50,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Expanded(
+                          child: DropdownButton(
+                            isExpanded: true,
+                            value: selectedDate,
+                            items: dates.map((e) {
+                              int day = e.day;
+                              String month = months[e.month - 1];
+                              String year = e.year.toString();
+                              return DropdownMenuItem(
                                 value: e,
-                                child: Text(e.toString()));
-                          }).toList(),
-                          onChanged: (value) => setState(() {
-                                selectedDate = value ?? DateTime.now();
-                              })),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.date_range),
-                        color: Colors.pink,
-                      )
-                    ],
+                                child: Text("$month $day. $year."),
+                              );
+                            }).toList(),
+                            onChanged: (value)=>setState(() {
+                              selectDate(value);
+                            }),
+                            icon: const Icon(
+                              Icons.date_range,
+                              color: Colors.pink,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -102,8 +108,8 @@ class _CalendarViewState extends State<CalendarView> {
               Expanded(
                 child: ListView(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(30),
+                    const Padding(
+                      padding: EdgeInsets.all(30),
                       child: Center(
                           child: Text(
                         "Appointments",
@@ -112,14 +118,14 @@ class _CalendarViewState extends State<CalendarView> {
                       )),
                     ),
                     Column(
-                      children: appointments
+                      children: todaysAppointsments
                               ?.map(
                                   (appointment) => AppointmentView(appointment))
                               .toList() ??
                           [],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(30),
+                    const Padding(
+                      padding: EdgeInsets.all(30),
                       child: Center(
                           child: Text(
                         "Reservations",
@@ -128,7 +134,7 @@ class _CalendarViewState extends State<CalendarView> {
                       )),
                     ),
                     Column(
-                      children: reservations
+                      children: todaysReservations
                               ?.map(
                                   (reservation) => ReservationView(reservation))
                               .toList() ??
@@ -161,6 +167,7 @@ class _CalendarViewState extends State<CalendarView> {
                           var success = await context
                               .read<AppState>()
                               .createAppointment(date);
+                          reload();
                           print(success);
                         }
                       },
@@ -177,11 +184,11 @@ class _CalendarViewState extends State<CalendarView> {
     );
   }
 
-  Widget builder(BuildContext) {
+  Widget builder(BuildContext context) {
     return Wrap(
       children: [
         const Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30),
+          padding: EdgeInsets.symmetric(vertical: 30),
           child: Center(
             child: Text(
               "Novi Termin",
@@ -240,6 +247,7 @@ class _CalendarViewState extends State<CalendarView> {
                     Navigator.pop(context, null);
                     return;
                   }
+                  // reload();
                   Navigator.pop(context,
                       date.copyWith(hour: time.hour, minute: time.minute));
                 });
@@ -250,5 +258,42 @@ class _CalendarViewState extends State<CalendarView> {
         )
       ],
     );
+  }
+
+  void selectDate(DateTime? value) {
+    selectedDate = value ?? DateTime.now();
+    dayAfterSelected = selectedDate.add(const Duration(days: 1));
+    todaysAppointsments = (appointments
+                ?.where((appointment) =>
+                    ((appointment.dateTime?.isAfter(selectedDate) ?? false) &&
+                        (appointment.dateTime?.isBefore(dayAfterSelected) ??
+                            false)))
+                .toList() ??
+            [])
+        .cast<Appointment>();
+
+    todaysReservations = (reservations
+                ?.where((reservation) =>
+                    ((reservation.date?.isAfter(selectedDate) ?? false) &&
+                        (reservation.date?.isBefore(dayAfterSelected) ??
+                            false)))
+                .toList() ??
+            [])
+        .cast<Reservation>();
+  }
+  Future<void> reload()async{
+
+    context.read<AppState>().getAppointments().then((value) {
+      setState(() {
+        appointments = value;
+        selectDate(selectedDate);
+      });
+    });
+    context.read<AppState>().getReservations().then((value) {
+      setState(() {
+        reservations = value;
+        selectDate(selectedDate);
+      });
+    });
   }
 }

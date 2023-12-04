@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 class NotificationsView extends StatelessWidget {
   const NotificationsView({Key? key}) : super(key: key);
@@ -66,6 +67,7 @@ class NotificationsView extends StatelessWidget {
       height: 27,
       decoration: ShapeDecoration(
         gradient: LinearGradient(
+          transform: GradientRotation(math.pi/2),
           begin: Alignment(0.49, -0.87),
           end: Alignment(-0.49, 0.87),
           colors: selected?[Color(0xFFFF5E6C), Color(0xFFFFC847)]:[Color(0x99FF5E6C), Color(0x99FFC847)],

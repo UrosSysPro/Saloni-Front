@@ -13,6 +13,7 @@ class User {
     this.id
   });
   static User? userFromJson(Map<String, dynamic> json,String? jwtTokenString) {
+    // print(json["Email"]);
     try {
       List<dynamic> list = jsonDecode(json["UseCases"]);
       User user = User(

@@ -1,6 +1,7 @@
 import "dart:convert";
 
 import 'package:flutter/material.dart';
+import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:salon/models/appointment.dart';
 import 'package:salon/models/reservation.dart';
 import 'package:salon/models/salon.dart';
@@ -35,7 +36,6 @@ class AppState extends ChangeNotifier {
     storage.read(key: "user").then((value) {
       if (value != null) {
         String? jwtTokenString = jsonDecode(value)["token"];
-        print(jwtTokenString);
         user = User.userFromJson(JwtDecoder.decode(value), jwtTokenString);
       }
       loadingUser = false;
@@ -335,7 +335,6 @@ class AppState extends ChangeNotifier {
     if (debugServer) {
       //vrati fake data
     }
-  
 
     var headers = {
       "Authorization": "Bearer ${user?.jwtTokenString}",
@@ -346,9 +345,7 @@ class AppState extends ChangeNotifier {
       "staffId": user?.id,
       "dateAndTime": date.toIso8601String()
     };
-    print(headers);
-    print(jsonEncode(body));
-    print("http://$api/api/StaffAppointment");
+    // print("http://$api/api/StaffAppointment");
     try {
       var response = await http.post(
         Uri.parse("http://$api/api/StaffAppointment"),
@@ -356,6 +353,8 @@ class AppState extends ChangeNotifier {
         body: jsonEncode(body),
       );
       if (response.statusCode == 201) {
+        print(response);
+        print(response.body);
         return true;
       } else {
         print(
@@ -421,6 +420,77 @@ class AppState extends ChangeNotifier {
     } catch (e) {
       print("[ERROR] AppState getReservations nema interneta ili server ne radi");
       return null;
+    }
+  }
+
+  Future<Salon?> getWorkersSalon()async{
+    if (debugServer) {
+      //vrati fake data
+    }
+    var headers = {
+      "Authorization": "Bearer ${user?.jwtTokenString}",
+    };
+    try {
+      var response = await http.get(
+        Uri.parse("http://$api/api/Staff"),
+        headers: headers
+      );
+      if (response.statusCode == 200) {
+        dynamic json=jsonDecode(response.body);
+        for(var staffJson in json["data"]){
+          
+          String userId=staffJson["userId"].toString();
+          int salonId=staffJson["salonId"];
+          if(userId==user?.id){
+            response=await http.get(Uri.parse("http://$api/api/Salon/$salonId"),headers: headers);
+            
+            return Salon.fromJson(response.body);
+          }
+        }
+        return null;
+      } else {
+        print(
+            "[ERROR] AppState getReservations ${response.statusCode}  ${response.body}");
+        return null;
+      }
+      // print(response.body);
+    } catch (e) {
+      print("[ERROR] AppState getReservations nema interneta ili server ne radi");
+      return null;
+    }
+  }
+
+  Future<bool> updateSalon(String salonId,String name,String adress)async{
+    if (debugServer) {
+      //vrati fake data
+    }
+    var headers = {
+      "Authorization": "Bearer ${user?.jwtTokenString}",
+      // "Accept":"application/json"
+      // "Content-Type":"multipart/form-data",
+    };
+    try {
+      var response = await http.put(
+        Uri.parse("http://$api/api/Salon"),
+        headers: headers,
+        body: {
+          "Id":salonId,
+          "Name":name,
+          "Adress":adress,
+        }
+      );
+      if (response.statusCode == 200) {
+        // print("updated");
+        return true;
+      } else {
+        print(
+            "[ERROR] AppState updateSalon ${response.statusCode}  ${response.body}");
+        return false;
+      }
+      // print(response.body);
+    } catch (e) {
+      print("[ERROR] AppState updateSalon nema interneta ili server ne radi $e");
+      return false;
     }
   }
 
