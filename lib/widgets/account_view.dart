@@ -21,8 +21,15 @@ class AccountView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  FlutterLogo(
-                    size: 60,
+                  Container(
+                    width: 60,height: 60,
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 253, 94, 108),
+                      borderRadius: BorderRadius.circular(100)
+                    ),
+                    child: Center(
+                      child: Icon(Icons.person,color: Colors.black, size: 50,),
+                    ),
                   ),
                   SizedBox(
                     width: 20,

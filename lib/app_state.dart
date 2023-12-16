@@ -395,7 +395,7 @@ class AppState extends ChangeNotifier {
     };
     try {
       var response = await http.get(
-        Uri.parse("http://$api/api/StaffAppointment?staffId=${user?.id}"),
+        Uri.parse("http://$api/api/StaffAppointment?staffId=${user?.id}&PerPage=1000"),
         headers: headers
       );
       if (response.statusCode == 200) {

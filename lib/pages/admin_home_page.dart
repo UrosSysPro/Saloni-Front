@@ -19,9 +19,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
         home: Scaffold(
       body: Builder(builder: (context){
         if(index==0)return const CalendarView();
-        if(index==1)return const SalesView();
-        if(index==2)return const NotificationsView();
-        if(index==3)return const AdminAccountView();
+        // if(index==1)return const SalesView();
+        if(index==1)return const NotificationsView();
+        if(index==2)return const AdminAccountView();
         return Container(color: Colors.red,);
       }),
 
@@ -40,7 +40,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
         unselectedItemColor: Colors.white,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: "Kalendar"),
-          BottomNavigationBarItem(icon: Icon(Icons.label), label: "Prodaja"),
+          // BottomNavigationBarItem(icon: Icon(Icons.label), label: "Prodaja"),
           BottomNavigationBarItem(icon: Icon(Icons.notifications), label: "Obavestenja"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Nalog"),
         ],
