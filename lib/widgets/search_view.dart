@@ -92,7 +92,7 @@ class _SearchViewState extends State<SearchView> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
         width: double.infinity,
-        height: 400,
+        // height: 400,
         decoration: BoxDecoration(
             color: const Color.fromARGB(255, 253, 94, 108),
             borderRadius: BorderRadius.circular(20),
@@ -104,9 +104,7 @@ class _SearchViewState extends State<SearchView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            FlutterLogo(
-              size: 150,
-            ),
+            SizedBox(width:170,child: Image(fit:BoxFit.cover,image: AssetImage("assets/images/search.png"),)),
             opis("Pokupi\npopust na\naplikaciji"),
             SizedBox(
               height: 20,

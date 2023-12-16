@@ -2,7 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class DiscountAdCard extends StatelessWidget {
-  const DiscountAdCard({ Key? key }) : super(key: key);
+  final Widget icon;
+  const DiscountAdCard({
+    required this.icon,
+    Key? key 
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +70,7 @@ class DiscountAdCard extends StatelessWidget {
           Positioned(
             right: 40,
             top: 15,
-            child: FlutterLogo(size: 100,)),
+            child: SizedBox(width: 120, child: icon,)),
         ],
       ),
     );

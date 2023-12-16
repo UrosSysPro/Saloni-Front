@@ -8,7 +8,7 @@ class CategoryListItem extends StatelessWidget {
     Key? key,
     required this.categoryName,
     required this.icon, 
-    this.onTap
+    this.onTap,
   }) : super(key: key);
 
   @override

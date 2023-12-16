@@ -23,7 +23,7 @@ class _HomeCategoryViewState extends State<HomeCategoryView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    context.read<AppState>().getRecomended().then((value){
+    context.read<AppState>().getRecomendedForCategory(2,"").then((value){
       print("recomendations loaded");
       setState(() {
         saloni=value;

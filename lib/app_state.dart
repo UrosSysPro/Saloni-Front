@@ -1,7 +1,6 @@
 import "dart:convert";
 
 import 'package:flutter/material.dart';
-import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:salon/models/appointment.dart';
 import 'package:salon/models/reservation.dart';
 import 'package:salon/models/salon.dart';
@@ -308,8 +307,25 @@ class AppState extends ChangeNotifier {
     return [];
   }
 
-  Future<List<Salon>> getRecomendedForCategory(String category) async {
-    return await search2("");
+  Future<List<Salon>> getRecomendedForCategory(int serviceId,String search) async {
+    if (debugServer) {
+      //vrati fake data
+    }
+
+    var headers = {"Authorization": "Bearer ${user?.jwtTokenString}"};
+    try {
+      var response = await http.get(
+          Uri.parse("http://$api/api/Salon?ServiceId=$serviceId&Keyword=$search"),
+          headers: headers);
+      if (response.statusCode == 200) {
+        return Salon.fromSearchResultJson(response.body);
+      } else {
+        print("[ERROR] AppState Search nema interneta ili server ne radi");
+      }
+    } catch (e) {
+      print("[ERROR] AppState Search nema interneta ili server ne radi");
+    }
+    return [];
   }
 
   Future<Salon> getSalon(String salonId) async {

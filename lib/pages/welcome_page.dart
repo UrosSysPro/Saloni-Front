@@ -100,6 +100,7 @@ class WelcomePage extends StatelessWidget {
                 Color.fromARGB(255, 252, 94, 110),
                 Color.fromARGB(255, 241, 92, 140)
               ])),
+       child: Image(image: AssetImage("assets/images/welcome.png")),
     );
   }
 
